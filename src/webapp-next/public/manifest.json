@@ -1,0 +1,15 @@
+{
+  "name": "Phoniebox",
+  "short_name": "Phoniebox",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#0d1117",
+  "background_color": "#0d1117",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

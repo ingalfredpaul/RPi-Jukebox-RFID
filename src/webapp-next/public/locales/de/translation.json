@@ -1,0 +1,297 @@
+{
+  "general": {
+    "buttons": {
+      "cancel": "Abbrechen",
+      "delete": "Löschen",
+      "save": "Speichern",
+      "confirm": "Bestätigen",
+      "close": "Schließen",
+      "back": "Zurück",
+      "upload": "Hochladen",
+      "refresh": "Aktualisieren",
+      "add": "Hinzufügen",
+      "edit": "Bearbeiten",
+      "remove": "Entfernen",
+      "play": "Abspielen",
+      "stop": "Stoppen",
+      "retry": "Erneut versuchen"
+    },
+    "loading": "Laden...",
+    "loading-error": "Fehler beim Laden",
+    "no-results": "Keine Ergebnisse",
+    "connection": {
+      "connected": "Verbunden",
+      "disconnected": "Verbindung unterbrochen",
+      "reconnecting": "Verbindung wird wiederhergestellt..."
+    },
+    "drag-drop": "Dateien hierher ziehen oder klicken",
+    "drag-drop-active": "Dateien hier ablegen..."
+  },
+  "navigation": {
+    "player": "Player",
+    "library": "Bibliothek",
+    "cards": "Karten",
+    "settings": "Einstellungen",
+    "spotify": "Spotify",
+    "radio": "Radio"
+  },
+  "player": {
+    "controls": {
+      "play": "Abspielen",
+      "pause": "Pause",
+      "next": "Nächster Titel",
+      "prev": "Vorheriger Titel",
+      "shuffle": "Zufallswiedergabe",
+      "repeat": "Wiederholen"
+    },
+    "cover": {
+      "no-cover": "Kein Cover"
+    },
+    "display": {
+      "no-title": "Kein Titel",
+      "no-artist": "Unbekannter Künstler",
+      "no-album": "Unbekanntes Album",
+      "not-playing": "Keine Wiedergabe"
+    },
+    "seekbar": {
+      "elapsed": "Vergangen",
+      "remaining": "Verbleibend"
+    },
+    "volume": {
+      "label": "Lautstärke",
+      "mute": "Stummschalten",
+      "unmute": "Ton einschalten"
+    },
+    "equalizer": {
+      "title": "Equalizer",
+      "presets": "Voreinstellungen",
+      "flat": "Flach",
+      "bass-boost": "Bass Boost",
+      "treble-boost": "Höhen Boost",
+      "vocal": "Stimme",
+      "reset": "Zurücksetzen",
+      "save-preset": "Voreinstellung speichern",
+      "hz": "Hz",
+      "khz": "kHz",
+      "db": "dB"
+    }
+  },
+  "library": {
+    "search": {
+      "placeholder": "Suchen...",
+      "no-results": "Keine Ergebnisse gefunden"
+    },
+    "albums": {
+      "title": "Alben",
+      "no-albums": "Keine Alben vorhanden"
+    },
+    "folders": {
+      "title": "Ordner",
+      "no-folders": "Keine Ordner vorhanden",
+      "back": "Zurück"
+    },
+    "songs": {
+      "title": "Titel",
+      "play-all": "Alle abspielen"
+    },
+    "selector": {
+      "albums": "Alben",
+      "folders": "Ordner"
+    },
+    "file-manager": {
+      "title": "Dateien verwalten",
+      "upload": "Dateien hochladen",
+      "upload-folder": "Ordner hochladen",
+      "new-folder": "Neuer Ordner",
+      "delete-confirm": "Möchtest du diese Datei wirklich löschen?",
+      "uploading": "Wird hochgeladen...",
+      "upload-success": "Upload erfolgreich",
+      "upload-error": "Upload fehlgeschlagen"
+    },
+    "playlist": {
+      "title": "Wiedergabeliste",
+      "create": "Neue Wiedergabeliste",
+      "edit": "Bearbeiten",
+      "sort": "Reihenfolge ändern",
+      "empty": "Wiedergabeliste ist leer"
+    }
+  },
+  "cards": {
+    "title": "RFID-Karten",
+    "overview": {
+      "title": "Übersicht",
+      "no-cards": "Keine Karten registriert",
+      "register-new": "Neue Karte registrieren"
+    },
+    "register": {
+      "title": "Karte registrieren",
+      "waiting": "Halte eine RFID-Karte an den Leser...",
+      "card-id": "Karten-ID"
+    },
+    "edit": {
+      "title": "Karte bearbeiten"
+    },
+    "form": {
+      "action-type": "Aktionstyp",
+      "select-action": "Aktion auswählen"
+    },
+    "actions": {
+      "play_music": "Musik abspielen",
+      "audio": "Audio-Steuerung",
+      "host": "System",
+      "timers": "Timer",
+      "spotify": "Spotify",
+      "radio": "Radio / Podcast",
+      "synchronisation": "Synchronisation"
+    },
+    "commands": {
+      "play_album": "Album abspielen",
+      "play_folder": "Ordner abspielen",
+      "play_single": "Einzelnen Titel abspielen",
+      "change_volume": "Lautstärke ändern",
+      "toggle_output": "Audio-Ausgang wechseln",
+      "play": "Abspielen",
+      "pause": "Pause",
+      "toggle": "Play/Pause",
+      "next_song": "Nächster Titel",
+      "prev_song": "Vorheriger Titel",
+      "shuffle": "Zufallswiedergabe",
+      "repeat": "Wiederholen",
+      "shutdown": "Herunterfahren",
+      "reboot": "Neustart",
+      "say_my_ip": "IP-Adresse ansagen",
+      "timer_shutdown": "Ausschalt-Timer",
+      "timer_stop_player": "Player-Stop-Timer",
+      "timer_fade_volume": "Lautstärke ausblenden",
+      "play_spotify_playlist": "Spotify-Playlist",
+      "play_spotify_album": "Spotify-Album",
+      "play_spotify_track": "Spotify-Titel",
+      "play_radio_station": "Radiosender",
+      "play_podcast": "Podcast"
+    },
+    "dialogs": {
+      "delete": {
+        "title": "Karte löschen",
+        "message": "Möchtest du diese Karte wirklich löschen?",
+        "confirm": "Löschen"
+      }
+    }
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "status": {
+      "title": "System-Status",
+      "version": "Version",
+      "cpu-temp": "CPU-Temperatur",
+      "disk-usage": "Speicher",
+      "ip-address": "IP-Adresse",
+      "battery": "Akku",
+      "uptime": "Laufzeit"
+    },
+    "audio": {
+      "title": "Audio",
+      "output": "Audio-Ausgang",
+      "speaker": "Lautsprecher",
+      "bluetooth": "Bluetooth",
+      "max-volume": "Maximale Lautstärke",
+      "max-volume-hint": "Begrenzt die Lautstärke für Kinder"
+    },
+    "equalizer": {
+      "title": "Equalizer",
+      "presets": "Voreinstellungen"
+    },
+    "general": {
+      "title": "Allgemein",
+      "show-covers": "Cover-Art anzeigen",
+      "language": "Sprache"
+    },
+    "timers": {
+      "title": "Timer",
+      "shutdown": "Ausschalt-Timer",
+      "stop-player": "Player stoppen nach",
+      "fade-volume": "Lautstärke ausblenden",
+      "idle-shutdown": "Bei Inaktivität ausschalten",
+      "set-timer": "Timer einstellen",
+      "minutes": "Minuten",
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "cancel": "Timer abbrechen"
+    },
+    "sleep-mode": {
+      "title": "Ruhemodus",
+      "enable": "Automatischen Ruhemodus aktivieren",
+      "timeout": "Ruhemodus nach Inaktivität",
+      "description": "Die Box schaltet sich automatisch aus wenn keine Musik spielt"
+    },
+    "system": {
+      "title": "System",
+      "reboot": "Neustart",
+      "shutdown": "Herunterfahren",
+      "reboot-confirm": "Phoniebox wirklich neustarten?",
+      "shutdown-confirm": "Phoniebox wirklich herunterfahren?",
+      "autohotspot": "Auto-Hotspot",
+      "autohotspot-hint": "Erstellt einen eigenen WLAN-Hotspot wenn kein Netzwerk verfügbar ist"
+    },
+    "second-swipe": {
+      "title": "Zweites Auflegen",
+      "description": "Was passiert wenn die gleiche Karte nochmal aufgelegt wird?",
+      "options": {
+        "toggle": "Play/Pause",
+        "play": "Abspielen",
+        "skip": "Nächster Titel",
+        "rewind": "Zurückspulen",
+        "replay": "Von vorne",
+        "none": "Nichts"
+      }
+    }
+  },
+  "spotify": {
+    "title": "Spotify",
+    "connect": "Mit Spotify verbinden",
+    "disconnect": "Spotify trennen",
+    "connected": "Verbunden",
+    "not-connected": "Nicht verbunden",
+    "search": {
+      "placeholder": "Songs, Alben, Playlists suchen...",
+      "no-results": "Keine Ergebnisse"
+    },
+    "playlists": {
+      "title": "Playlists",
+      "no-playlists": "Keine Playlists"
+    },
+    "now-playing": "Wird abgespielt"
+  },
+  "radio": {
+    "title": "Radio & Podcasts",
+    "stations": {
+      "title": "Radiosender",
+      "add": "Sender hinzufügen",
+      "no-stations": "Keine Sender gespeichert",
+      "url": "Stream-URL",
+      "name": "Sendername"
+    },
+    "podcasts": {
+      "title": "Podcasts",
+      "add": "Podcast hinzufügen",
+      "no-podcasts": "Keine Podcasts",
+      "resume": "Fortsetzen bei",
+      "episodes": "Folgen"
+    }
+  },
+  "upload": {
+    "title": "Dateien hochladen",
+    "drag-files": "Audio-Dateien hierher ziehen",
+    "drag-folder": "Ordner hierher ziehen",
+    "or-click": "oder klicken zum Auswählen",
+    "progress": "{{current}} von {{total}} hochgeladen",
+    "complete": "Upload abgeschlossen",
+    "error": "Fehler beim Hochladen von {{file}}"
+  },
+  "toast": {
+    "card-registered": "Karte erfolgreich registriert",
+    "card-deleted": "Karte gelöscht",
+    "settings-saved": "Einstellungen gespeichert",
+    "upload-complete": "Upload abgeschlossen",
+    "error-generic": "Ein Fehler ist aufgetreten"
+  }
+}

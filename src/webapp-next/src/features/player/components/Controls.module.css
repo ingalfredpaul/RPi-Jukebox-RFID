@@ -1,0 +1,47 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+  width: 100%;
+  max-width: 360px;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+  color: var(--color-text-primary);
+}
+
+.btn:hover {
+  background: var(--color-bg-tertiary);
+}
+
+.btn:active {
+  transform: scale(0.92);
+}
+
+.secondary {
+  width: 44px;
+  height: 44px;
+  font-size: 1.2rem;
+}
+
+.playPause {
+  width: 64px;
+  height: 64px;
+  font-size: 1.6rem;
+  background: var(--color-accent);
+  color: var(--color-text-on-accent);
+}
+
+.playPause:hover {
+  background: var(--color-accent-hover);
+}
+
+.active {
+  color: var(--color-accent-light);
+}

@@ -1,0 +1,226 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - var(--nav-height));
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--color-border);
+  padding: 0 var(--space-lg);
+  background: var(--color-bg-secondary);
+}
+
+.tab {
+  flex: 1;
+  padding: var(--space-md) var(--space-lg);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition-fast);
+  text-align: center;
+}
+
+.tab:hover {
+  color: var(--color-text-primary);
+}
+
+.activeTab {
+  color: var(--color-accent-light);
+  border-bottom-color: var(--color-accent);
+}
+
+.list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.stationItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.stationItem:hover {
+  background: var(--color-bg-secondary);
+}
+
+.stationIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.stationInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.stationName {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stationUrl {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--font-mono);
+}
+
+.stationActions {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.actionBtn {
+  padding: var(--space-xs) var(--space-sm);
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.actionBtn:hover {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
+}
+
+.playBtn {
+  color: var(--color-accent-light);
+}
+
+.deleteBtn {
+  color: var(--color-error);
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3xl);
+  color: var(--color-text-muted);
+  text-align: center;
+  gap: var(--space-md);
+}
+
+.emptyIcon {
+  font-size: 2.5rem;
+}
+
+.addSection {
+  padding: var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-secondary);
+}
+
+.addForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.addRow {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.input {
+  flex: 1;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+}
+
+.input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.input:focus {
+  border-color: var(--color-accent);
+  outline: none;
+}
+
+.addBtn {
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--color-accent);
+  color: var(--color-text-on-accent);
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
+  transition: background var(--transition-fast);
+}
+
+.addBtn:hover {
+  background: var(--color-accent-hover);
+}
+
+.addBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.podcastItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.podcastItem:hover {
+  background: var(--color-bg-secondary);
+}
+
+.podcastProgress {
+  font-size: var(--font-size-xs);
+  color: var(--color-accent-light);
+}
+
+.progressBar {
+  height: 3px;
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-full);
+  margin-top: var(--space-xs);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--color-accent);
+  border-radius: var(--radius-full);
+  transition: width var(--transition-normal);
+}
+
+.uploadSection {
+  padding: var(--space-lg);
+}
+
+.sectionSubtitle {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-md);
+}

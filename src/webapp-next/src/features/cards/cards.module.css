@@ -1,0 +1,208 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - var(--nav-height));
+}
+
+.list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.cardItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.cardItem:hover {
+  background: var(--color-bg-secondary);
+}
+
+.cardIcon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.cardInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.cardId {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-mono);
+}
+
+.cardAlias {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.cardAction {
+  color: var(--color-text-muted);
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3xl);
+  color: var(--color-text-muted);
+  text-align: center;
+  gap: var(--space-md);
+}
+
+.emptyIcon {
+  font-size: 2.5rem;
+}
+
+.fab {
+  position: fixed;
+  bottom: calc(var(--nav-height) + var(--space-lg));
+  right: var(--space-lg);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  color: var(--color-text-on-accent);
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-lg);
+  transition: all var(--transition-fast);
+  z-index: var(--z-sticky);
+}
+
+.fab:hover {
+  background: var(--color-accent-hover);
+  transform: scale(1.05);
+}
+
+.waiting {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3xl);
+  gap: var(--space-xl);
+  color: var(--color-text-secondary);
+}
+
+.pulse {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--color-accent-muted);
+  animation: pulseAnim 2s ease-in-out infinite;
+}
+
+@keyframes pulseAnim {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+
+.form {
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.cardIdDisplay {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-lg);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.select {
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-md);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238b949e' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+.select:focus {
+  border-color: var(--color-accent);
+  outline: none;
+}
+
+.selectorContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.saveBtn {
+  padding: var(--space-md) var(--space-xl);
+  background: var(--color-accent);
+  color: var(--color-text-on-accent);
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-md);
+  transition: background var(--transition-fast);
+}
+
+.saveBtn:hover:not(:disabled) {
+  background: var(--color-accent-hover);
+}
+
+.saveBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.deleteBtn {
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  padding: var(--space-xs) var(--space-sm);
+}
+
+.cancelBtn {
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  background: var(--color-bg-tertiary);
+}
+
+.confirmDeleteBtn {
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-md);
+  background: var(--color-error);
+  color: white;
+  font-weight: var(--font-weight-medium);
+}
+
+.confirmDeleteBtn:hover {
+  opacity: 0.9;
+}

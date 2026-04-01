@@ -1,0 +1,42 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  width: 100%;
+  max-width: 360px;
+}
+
+.muteBtn {
+  font-size: 1.2rem;
+  padding: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.muted {
+  opacity: 0.5;
+}
+
+.slider {
+  flex: 1;
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    var(--color-accent) 0%,
+    var(--color-accent) var(--progress),
+    var(--color-bg-tertiary) var(--progress),
+    var(--color-bg-tertiary) 100%
+  );
+}
+
+.slider::-webkit-slider-thumb {
+  width: 16px;
+  height: 16px;
+}
+
+.level {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  min-width: 28px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
