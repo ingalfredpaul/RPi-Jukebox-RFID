@@ -1,0 +1,192 @@
+[
+ {
+  "name": "connected to real box (no connection banner)",
+  "ok": true,
+  "info": "banner count 0"
+ },
+ {
+  "name": "no horizontal overflow: player",
+  "ok": true,
+  "info": "{\"scrollW\":390,\"vw\":390,\"bad\":[]}"
+ },
+ {
+  "name": "touch targets >=44px: player",
+  "ok": true,
+  "info": ""
+ },
+ {
+  "name": "no horizontal overflow: library",
+  "ok": true,
+  "info": "{\"scrollW\":390,\"vw\":390,\"bad\":[]}"
+ },
+ {
+  "name": "touch targets >=44px: library",
+  "ok": true,
+  "info": ""
+ },
+ {
+  "name": "no horizontal overflow: library-manage",
+  "ok": true,
+  "info": "{\"scrollW\":390,\"vw\":390,\"bad\":[]}"
+ },
+ {
+  "name": "touch targets >=44px: library-manage",
+  "ok": true,
+  "info": ""
+ },
+ {
+  "name": "no horizontal overflow: cards",
+  "ok": true,
+  "info": "{\"scrollW\":390,\"vw\":390,\"bad\":[]}"
+ },
+ {
+  "name": "touch targets >=44px: cards",
+  "ok": true,
+  "info": ""
+ },
+ {
+  "name": "no horizontal overflow: card-new",
+  "ok": true,
+  "info": "{\"scrollW\":390,\"vw\":390,\"bad\":[]}"
+ },
+ {
+  "name": "touch targets >=44px: card-new",
+  "ok": true,
+  "info": ""
+ },
+ {
+  "name": "no horizontal overflow: card-new-special",
+  "ok": true,
+  "info": "{\"scrollW\":390,\"vw\":390,\"bad\":[]}"
+ },
+ {
+  "name": "no horizontal overflow: settings",
+  "ok": true,
+  "info": "{\"scrollW\":390,\"vw\":390,\"bad\":[]}"
+ },
+ {
+  "name": "touch targets >=44px: settings",
+  "ok": true,
+  "info": ""
+ },
+ {
+  "name": "no JS errors on real-box pages",
+  "ok": true,
+  "info": ""
+ },
+ {
+  "name": "no horizontal overflow: upload-empty",
+  "ok": true,
+  "info": "{\"scrollW\":390,\"vw\":390,\"bad\":[]}"
+ },
+ {
+  "name": "touch targets >=44px: upload-empty",
+  "ok": true,
+  "info": ""
+ },
+ {
+  "name": "no horizontal overflow: upload-done",
+  "ok": true,
+  "info": "{\"scrollW\":390,\"vw\":390,\"bad\":[]}"
+ },
+ {
+  "name": "files arrived on disk, others skipped",
+  "ok": true,
+  "info": "[\"Cover.jpg\",\"Kapitel 01.mp3\",\"Kapitel 02.mp3\"]"
+ },
+ {
+  "name": "uploaded file has correct size",
+  "ok": true,
+  "info": ""
+ },
+ {
+  "name": "skipped files are reported (txt + too big)",
+  "ok": true,
+  "info": ""
+ },
+ {
+  "name": "folder upload keeps structure",
+  "ok": true,
+  "info": ""
+ },
+ {
+  "name": "hidden file in folder not uploaded",
+  "ok": true,
+  "info": ""
+ },
+ {
+  "name": "no JS errors on upload page",
+  "ok": true,
+  "info": ""
+ },
+ {
+  "name": "cancel all marks files as canceled",
+  "ok": true,
+  "info": "count 2"
+ },
+ {
+  "name": "retry after cancel succeeds",
+  "ok": true,
+  "info": ""
+ },
+ {
+  "name": "service-down message shown",
+  "ok": true,
+  "info": ""
+ },
+ {
+  "name": "no horizontal overflow: pin-locked",
+  "ok": true,
+  "info": "{\"scrollW\":390,\"vw\":390,\"bad\":[]}"
+ },
+ {
+  "name": "touch targets >=44px: pin-locked",
+  "ok": true,
+  "info": ""
+ },
+ {
+  "name": "cards locked without PIN",
+  "ok": true,
+  "info": ""
+ },
+ {
+  "name": "player stays usable without PIN",
+  "ok": true,
+  "info": ""
+ },
+ {
+  "name": "upload locked without PIN",
+  "ok": true,
+  "info": ""
+ },
+ {
+  "name": "wrong PIN rejected",
+  "ok": true,
+  "info": ""
+ },
+ {
+  "name": "correct PIN unlocks",
+  "ok": true,
+  "info": ""
+ },
+ {
+  "name": "no horizontal overflow: unreachable",
+  "ok": true,
+  "info": "{\"scrollW\":390,\"vw\":390,\"bad\":[]}"
+ },
+ {
+  "name": "unreachable banner visible",
+  "ok": true,
+  "info": ""
+ },
+ {
+  "name": "no horizontal overflow: player 320x568",
+  "ok": true,
+  "info": "{\"scrollW\":320,\"vw\":320,\"bad\":[]}"
+ },
+ {
+  "name": "no horizontal overflow: upload 320x568",
+  "ok": true,
+  "info": "{\"scrollW\":320,\"vw\":320,\"bad\":[]}"
+ }
+]
