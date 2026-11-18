@@ -12,6 +12,8 @@ modules:
     jingle.alsawave: jingle.alsawave
     jingle.jinglemp3: jingle.jinglemp3
     player: playermpd
+    # Kids mode: keep playing on same card, fade on card change, resume for audio books (needs player + volume)
+    kidsbox: kidsbox
     cards: rfid.cards
     rfid: rfid.reader
     timers: timers
@@ -93,6 +95,19 @@ playermpd:
   stopped_prev_action: prev
   # Must be one of: 'none', 'next', 'rewind':
   stopped_next_action: next
+kidsbox:
+  # Kids mode plugin, see documentation/kinder-verhalten.md
+  # Where positions and per-folder resume settings are stored (relative to src/jukebox)
+  state_file: ../../shared/settings/kidsbox.json
+  # Fade-out/fade-in (ms) when another card is put on while music is playing. 0 = hard cut
+  fade_ms: 400
+  # When resuming, jump back a few seconds so the child hears the context again
+  resume_rewind_sec: 3
+  # While playing, store the position of folders with "resume" at most this often (SD card wear)
+  resume_save_interval_sec: 30
+  # Short signal for cards the box does not know. Empty string disables it
+  unknown_card_sound: ../../resources/audio/unknown-card.wav
+  unknown_card_cooldown_sec: 5
 rpc:
   tcp_port: 5555
   websocket_port: 5556

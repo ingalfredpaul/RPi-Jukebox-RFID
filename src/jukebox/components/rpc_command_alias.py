@@ -18,6 +18,11 @@ cmd_alias_definitions = {
         'package': 'player',
         'plugin': 'ctrl',
         'method': 'play_card'},
+    'play_card_kids': {
+        'title': 'Play music folder (kids mode) triggered by card swipe',
+        'note': "Same card again keeps playing, other card fades over, optional resume (see components/kidsbox)",
+        'package': 'kidsbox',
+        'plugin': 'play_card'},
     'play_album': {
         'title': 'Play Album triggered by card swipe',
         'note': "This function plays the content of a given album",
