@@ -25,7 +25,7 @@ export function Header({ title, showBack = false, backTo, actions }: HeaderProps
     <header className={styles.header}>
       <div className={styles.left}>
         {showBack && (
-          <button className={styles.backBtn} onClick={handleBack} aria-label={t('general.buttons.back')}>
+          <button className={styles.backBtn} onClick={handleBack} aria-label={t("general.buttons.back")}>
             ←
           </button>
         )}

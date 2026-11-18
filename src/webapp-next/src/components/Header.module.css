@@ -2,8 +2,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: var(--header-height);
-  padding: 0 var(--space-lg);
+  min-height: calc(var(--header-height) + var(--safe-top));
+  padding: var(--safe-top) var(--space-lg) 0;
   background: var(--color-bg-secondary);
   border-bottom: 1px solid var(--color-border);
   position: sticky;
@@ -22,7 +22,9 @@
 
 .backBtn {
   font-size: var(--font-size-xl);
-  padding: var(--space-xs);
+  min-width: var(--touch-min);
+  min-height: var(--touch-min);
+  margin-left: calc(var(--space-sm) * -1);
   color: var(--color-accent-light);
 }
 

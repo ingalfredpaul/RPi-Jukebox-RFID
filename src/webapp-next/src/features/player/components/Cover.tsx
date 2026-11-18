@@ -1,41 +1,42 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { usePlayerStore } from '../../../stores/playerStore';
+import { useSettingsStore } from '../../../stores/settingsStore';
 import { request } from '../../../services/request';
-import styles from './Cover.module.css';
+import styles from '../player.module.css';
 
 export function Cover() {
-  const status = usePlayerStore((s) => s.status);
+  const { t } = useTranslation();
+  const file = usePlayerStore((s) => s.status?.file ?? '');
   const coverUrl = usePlayerStore((s) => s.coverUrl);
   const setCoverUrl = usePlayerStore((s) => s.setCoverUrl);
+  const showCovers = useSettingsStore((s) => s.settings.show_covers);
 
   useEffect(() => {
-    if (!status?.file) {
+    if (!file || !showCovers) {
       setCoverUrl(null);
       return;
     }
-
-    async function loadCover() {
-      const { result } = await request<string>('getSingleCoverArt', {
-        song_url: status!.file,
-      });
-      if (result) {
-        setCoverUrl(`/cover-cache/${result}`);
-      } else {
-        setCoverUrl(null);
-      }
-    }
-
-    loadCover();
-  }, [status?.file, setCoverUrl]);
+    let cancelled = false;
+    void request<string>('getSingleCoverArt', { song_url: file }).then(({ result }) => {
+      if (!cancelled) setCoverUrl(result ? `/cover-cache/${result}` : null);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [file, showCovers, setCoverUrl]);
 
   return (
-    <div className={styles.container}>
+    <div className={styles.cover}>
       {coverUrl ? (
-        <img src={coverUrl} alt="Cover" className={styles.image} />
+        <img
+          src={coverUrl}
+          alt={t('player.cover.alt')}
+          className={styles.coverImg}
+          onError={() => setCoverUrl(null)}
+        />
       ) : (
-        <div className={styles.fallback}>
-          <span className={styles.icon}>♪</span>
-        </div>
+        <div className={styles.coverFallback} aria-hidden="true">♪</div>
       )}
     </div>
   );

@@ -1,30 +1,44 @@
+/* In the document flow (sticky), so it never covers the page header. */
 .bar {
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
-  height: var(--connection-bar-height);
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: var(--space-sm);
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-lg);
+  padding-top: calc(var(--space-sm) + var(--safe-top));
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
   z-index: var(--z-connection);
-  color: white;
+  color: #fff;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.text span {
+  opacity: 0.9;
+  font-size: var(--font-size-xs);
 }
 
 .disconnected {
-  background: var(--color-error);
+  background: #b42318;
 }
 
 .reconnecting {
-  background: var(--color-warning);
+  background: #b54708;
+}
+
+.connecting {
+  background: #175cd3;
 }
 
 .spinner {
-  width: 14px;
-  height: 14px;
+  flex: none;
+  width: 16px;
+  height: 16px;
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-top-color: white;
   border-radius: 50%;

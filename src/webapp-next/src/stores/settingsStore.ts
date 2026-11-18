@@ -7,28 +7,36 @@ interface AppSettings {
 
 interface SettingsState {
   settings: AppSettings;
+  /** Soft maximum volume (hearing protection) as configured on the box, 0..100. */
+  softMaxVolume: number;
   isLoading: boolean;
   error: string | null;
   loadSettings: () => Promise<void>;
   updateSettings: (partial: Partial<AppSettings>) => Promise<void>;
+  setSoftMaxVolume: (value: number) => Promise<boolean>;
 }
 
 export const useSettingsStore = create<SettingsState>((set, get) => ({
   settings: {
     show_covers: true,
   },
+  softMaxVolume: 100,
   isLoading: false,
   error: null,
 
   loadSettings: async () => {
     set({ isLoading: true, error: null });
-    const { result, error } = await request<AppSettings>('getAppSettings');
+    const [app, max] = await Promise.all([
+      request<AppSettings>('getAppSettings'),
+      request<number>('getMaxVolume'),
+    ]);
 
-    if (error) {
-      set({ isLoading: false, error });
-    } else if (result) {
-      set({ settings: result, isLoading: false });
-    }
+    set({
+      isLoading: false,
+      error: app.error ?? null,
+      ...(app.result ? { settings: { ...get().settings, ...app.result } } : {}),
+      ...(typeof max.result === 'number' ? { softMaxVolume: max.result } : {}),
+    });
   },
 
   updateSettings: async (partial) => {
@@ -39,5 +47,12 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
     if (error) {
       console.error('[Settings] Update failed:', error);
     }
+  },
+
+  setSoftMaxVolume: async (value) => {
+    const { error } = await request('setMaxVolume', { max_volume: value });
+    if (error) return false;
+    set({ softMaxVolume: value });
+    return true;
   },
 }));

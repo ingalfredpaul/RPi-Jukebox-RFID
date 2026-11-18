@@ -8,6 +8,7 @@ describe('pubSubStore', () => {
       batteryStatus: null,
       cpuTemp: null,
       rfidCardId: null,
+      lastScan: null,
       coreVersion: null,
       startedAt: null,
       pluginsLoaded: {},
@@ -16,12 +17,12 @@ describe('pubSubStore', () => {
 
   describe('handleEvent', () => {
     it('should handle volume.level events', () => {
-      usePubSubStore.getState().handleEvent('volume.level', { level: 75, mute: false });
+      usePubSubStore.getState().handleEvent('volume.level', { volume: 75, mute: false });
       expect(usePubSubStore.getState().volume).toEqual({ level: 75, mute: false });
     });
 
     it('should handle host.temperature.cpu events', () => {
-      usePubSubStore.getState().handleEvent('host.temperature.cpu', 55.3);
+      usePubSubStore.getState().handleEvent('host.temperature.cpu', '55.3');
       expect(usePubSubStore.getState().cpuTemp).toBe(55.3);
     });
 

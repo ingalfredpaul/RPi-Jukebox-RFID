@@ -17,7 +17,7 @@ describe('commands', () => {
   });
 
   it('should throw for unknown command', () => {
-    expect(() => getCommand('nonexistent' as any)).toThrow('Unknown command');
+    expect(() => getCommand('nonexistent' as never)).toThrow('Unknown command');
   });
 
   it('should have all critical commands defined', () => {

@@ -22,6 +22,8 @@ describe('playerStore', () => {
       elapsed: 10,
       duration: 200,
       songid: '1',
+      song: 0,
+      playlistlength: 1,
       shuffle: false,
       repeat: false,
       single: false,
@@ -38,7 +40,7 @@ describe('playerStore', () => {
       state: 'pause',
       title: '', artist: '', album: '', albumartist: '',
       file: '', track: '', elapsed: 0, duration: 0,
-      songid: '', shuffle: false, repeat: false, single: false,
+      songid: '', song: -1, playlistlength: 0, shuffle: false, repeat: false, single: false,
     });
 
     expect(usePlayerStore.getState().isPlaying).toBe(false);

@@ -1,75 +1,74 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { request } from '../../../services/request';
+import type { CommandName } from '../../../services/commands';
 import { TIMER_STEPS } from '../../../config';
-import styles from '../settings.module.css';
 
 interface TimerConfig {
   key: string;
-  startCmd: string;
-  cancelCmd: string;
-  stateCmd: string;
+  start: CommandName;
+  cancel: CommandName;
+  state: CommandName;
+}
+
+interface TimerState {
+  enabled: boolean;
+  remaining_seconds?: number;
 }
 
 const TIMERS: TimerConfig[] = [
-  { key: 'shutdown', startCmd: 'timer_shutdown', cancelCmd: 'timer_shutdown.cancel', stateCmd: 'timer_shutdown.get_state' },
-  { key: 'stop-player', startCmd: 'timer_stop_player', cancelCmd: 'timer_stop_player.cancel', stateCmd: 'timer_stop_player.get_state' },
-  { key: 'fade-volume', startCmd: 'timer_fade_volume', cancelCmd: 'timer_fade_volume.cancel', stateCmd: 'timer_fade_volume.get_state' },
+  { key: 'shutdown', start: 'timer_shutdown', cancel: 'timer_shutdown.cancel', state: 'timer_shutdown.get_state' },
+  { key: 'stop-player', start: 'timer_stop_player', cancel: 'timer_stop_player.cancel', state: 'timer_stop_player.get_state' },
+  { key: 'fade-volume', start: 'timer_fade_volume', cancel: 'timer_fade_volume.cancel', state: 'timer_fade_volume.get_state' },
 ];
 
 export function TimerSettings() {
   const { t } = useTranslation();
-  const [timerStates, setTimerStates] = useState<Record<string, { enabled: boolean; remaining: number }>>({});
+  const [states, setStates] = useState<Record<string, TimerState>>({});
 
-  const loadStates = useCallback(async () => {
+  const load = useCallback(async () => {
     for (const timer of TIMERS) {
-      const { result } = await request<{ enabled: boolean; remaining: number }>(timer.stateCmd as any);
-      if (result) {
-        setTimerStates((prev) => ({ ...prev, [timer.key]: result }));
-      }
+      const { result } = await request<TimerState>(timer.state);
+      if (result) setStates((prev) => ({ ...prev, [timer.key]: result }));
     }
   }, []);
 
   useEffect(() => {
-    loadStates();
-    const interval = setInterval(loadStates, 10000);
-    return () => clearInterval(interval);
-  }, [loadStates]);
+    void load();
+    const id = setInterval(() => void load(), 10000);
+    return () => clearInterval(id);
+  }, [load]);
 
-  const handleSetTimer = async (timer: TimerConfig, minutes: number) => {
-    if (minutes === 0) {
-      await request(timer.cancelCmd as any);
-    } else {
-      await request(timer.startCmd as any, { wait_seconds: minutes * 60 });
-    }
-    loadStates();
+  const set = async (timer: TimerConfig, minutes: number) => {
+    if (minutes === 0) await request(timer.cancel);
+    else await request(timer.start, { wait_seconds: minutes * 60 });
+    void load();
   };
 
   return (
-    <section className={styles.card}>
-      <div className={styles.cardHeader}>{t('settings.timers.title')}</div>
-      <div className={styles.cardBody}>
+    <section className="ui-card">
+      <div className="ui-card-title">{t('settings.timers.title')}</div>
+      <div className="ui-card-body">
         {TIMERS.map((timer) => {
-          const state = timerStates[timer.key];
-          const isActive = state?.enabled;
-          const remaining = state?.remaining ? Math.ceil(state.remaining / 60) : 0;
-
+          const state = states[timer.key];
+          const active = state?.enabled;
+          const remaining = state?.remaining_seconds ? Math.ceil(state.remaining_seconds / 60) : 0;
           return (
-            <div key={timer.key} className={styles.timerItem}>
-              <div className={styles.timerInfo}>
-                <span className={styles.timerName}>{t(`settings.timers.${timer.key}`)}</span>
-                <span className={`${styles.timerStatus} ${isActive ? styles.timerActive : ''}`}>
-                  {isActive ? `${remaining} ${t('settings.timers.minutes')}` : t('settings.timers.inactive')}
-                </span>
-              </div>
+            <div key={timer.key} className="ui-field">
+              <label className="ui-label" htmlFor={`timer-${timer.key}`}>
+                {t(`settings.timers.${timer.key}`)}
+                {' · '}
+                <strong>{active ? t('settings.timers.remaining', { minutes: remaining }) : t('settings.timers.inactive')}</strong>
+              </label>
               <select
-                className={styles.select}
+                id={`timer-${timer.key}`}
+                className="ui-select"
                 value=""
-                onChange={(e) => handleSetTimer(timer, Number(e.target.value))}
+                onChange={(e) => void set(timer, Number(e.target.value))}
               >
-                <option value="" disabled>{isActive ? t('settings.timers.cancel') : t('settings.timers.set-timer')}</option>
-                {isActive && <option value="0">{t('settings.timers.cancel')}</option>}
-                {TIMER_STEPS.filter((s) => s > 0).map((step) => (
+                <option value="" disabled>{active ? t('settings.timers.change') : t('settings.timers.set-timer')}</option>
+                {active && <option value="0">{t('settings.timers.cancel')}</option>}
+                {TIMER_STEPS.filter((s) => s >= (timer.key === 'fade-volume' ? 5 : 1)).map((step) => (
                   <option key={step} value={step}>{step} {t('settings.timers.minutes')}</option>
                 ))}
               </select>

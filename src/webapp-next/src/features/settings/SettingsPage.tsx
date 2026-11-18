@@ -1,30 +1,47 @@
 import { useTranslation } from 'react-i18next';
 import { Header } from '../../components/Header';
 import { ErrorBoundary } from '../../components/ErrorBoundary';
+import { ParentGate } from '../../components/ParentGate';
+import { useParentStore, useIsParent } from '../../stores/parentStore';
+import { KidsSettings } from './components/KidsSettings';
+import { PinSettings } from './components/PinSettings';
 import { SystemStatus } from './components/SystemStatus';
-import { AudioSettings } from './components/AudioSettings';
 import { TimerSettings } from './components/TimerSettings';
-import { SleepMode } from './components/SleepMode';
 import { SystemControls } from './components/SystemControls';
-import { NetworkSettings } from './components/NetworkSettings';
-import styles from './settings.module.css';
 
-export function SettingsPage() {
+function Content() {
   const { t } = useTranslation();
+  const lock = useParentStore((s) => s.lock);
+  const hasPin = useParentStore((s) => s.stored !== null);
+  const isParent = useIsParent();
 
   return (
-    <div className={styles.page}>
-      <Header title={t('settings.title')} />
-      <div className={styles.sections}>
+    <div>
+      <Header
+        title={t('settings.title')}
+        actions={
+          hasPin && isParent ? (
+            <button className="ui-btn" onClick={lock}>🔒 {t('parent.lock-now')}</button>
+          ) : undefined
+        }
+      />
+      <div className="ui-page">
         <ErrorBoundary>
-          <SystemStatus />
-          <AudioSettings />
+          <KidsSettings />
+          <PinSettings />
           <TimerSettings />
-          <SleepMode />
-          <NetworkSettings />
+          <SystemStatus />
           <SystemControls />
         </ErrorBoundary>
       </div>
     </div>
+  );
+}
+
+export function SettingsPage() {
+  return (
+    <ParentGate>
+      <Content />
+    </ParentGate>
   );
 }

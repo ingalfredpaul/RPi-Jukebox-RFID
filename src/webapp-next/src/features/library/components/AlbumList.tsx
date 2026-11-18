@@ -13,7 +13,7 @@ interface Album {
 export function AlbumList() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { data, isLoading } = useRequest<Album[]>('albumList');
+  const { data, isLoading, error, refetch } = useRequest<Album[]>('albumList');
   const [search, setSearch] = useState('');
 
   const filtered = useMemo(() => {
@@ -27,11 +27,22 @@ export function AlbumList() {
 
   if (isLoading) return <LoadingSpinner />;
 
+  if (error) {
+    return (
+      <div className={styles.empty}>
+        <span className={styles.emptyIcon}>📡</span>
+        <p>{t('general.loading-error')}</p>
+        <button className="ui-btn" onClick={refetch}>{t('general.buttons.retry')}</button>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className={styles.searchContainer}>
         <input
-          className={styles.searchInput}
+          className="ui-input"
+          type="search"
           placeholder={t('library.search.placeholder')}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -42,22 +53,24 @@ export function AlbumList() {
         <div className={styles.empty}>
           <span className={styles.emptyIcon}>📀</span>
           <p>{search ? t('library.search.no-results') : t('library.albums.no-albums')}</p>
+          {!search && <p className="ui-hint">{t('library.albums.hint')}</p>}
         </div>
       ) : (
         <div className={styles.list}>
           {filtered.map((album) => (
-            <div
-              key={`${album.albumartist}-${album.album}`}
-              className={styles.listItem}
-              onClick={() =>
-                navigate(`/library/albums/${encodeURIComponent(album.albumartist)}/${encodeURIComponent(album.album)}`)
-              }
-            >
-              <div className={styles.itemIcon}>📀</div>
-              <div className={styles.itemInfo}>
-                <div className={styles.itemTitle}>{album.album}</div>
-                <div className={styles.itemSubtitle}>{album.albumartist}</div>
-              </div>
+            <div key={`${album.albumartist}-${album.album}`} className={styles.listItem}>
+              <button
+                className={styles.rowMain}
+                onClick={() =>
+                  navigate(`/library/albums/${encodeURIComponent(album.albumartist)}/${encodeURIComponent(album.album)}`)
+                }
+              >
+                <span className={styles.itemIcon}>📀</span>
+                <span className={styles.itemInfo}>
+                  <span className={styles.itemTitle} style={{ display: 'block' }}>{album.album}</span>
+                  <span className={styles.itemSubtitle} style={{ display: 'block' }}>{album.albumartist}</span>
+                </span>
+              </button>
             </div>
           ))}
         </div>

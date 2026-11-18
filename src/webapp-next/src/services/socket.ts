@@ -21,6 +21,8 @@ class PhoneboxSocket {
   private isProcessing = false;
   private reconnectAttempts = 0;
   private destroyed = false;
+  /** Timestamp of the last PubSub message; used by the watchdog in useSocketInit. */
+  lastMessageAt = 0;
 
   private onConnectionChange: ((connected: boolean) => void) | null = null;
 
@@ -54,6 +56,7 @@ class PhoneboxSocket {
       }
 
       this.reconnectAttempts = 0;
+      this.lastMessageAt = Date.now();
       this.onConnectionChange?.(true);
 
       this.pubSubHandlers.forEach((handler) => handler(topic, data));
@@ -198,8 +201,13 @@ class PhoneboxSocket {
         const index = this.requestQueue.findIndex((r) => r.payload.id === requestId);
         if (index !== -1) {
           const req = this.requestQueue.splice(index, 1)[0];
-          if (this.isProcessing && index === 0) {
+          const wasInFlight = this.isProcessing && index === 0;
+          if (wasInFlight) {
             this.isProcessing = false;
+            // A ZMQ REQ socket cannot send again before it got a reply:
+            // replace it, otherwise every later request would hang as well.
+            this.reqSocket?.close();
+            this.initReqSocket();
           }
           req?.reject(`Request timeout after ${REQUEST_TIMEOUT}ms: ${pkg}.${plugin}.${method}`);
           this.processQueue();
@@ -209,6 +217,17 @@ class PhoneboxSocket {
       this.requestQueue.push({ payload, resolve, reject, timeoutId });
       this.processQueue();
     });
+  }
+
+  /** Drop and re-create both sockets (phone woke up, Wi-Fi changed, box rebooted). */
+  reconnectAll(): void {
+    if (this.destroyed) return;
+    this.subSocket?.close();
+    this.initSubSocket();
+    this.rejectCurrentRequest('Reconnect');
+    this.reqSocket?.close();
+    this.initReqSocket();
+    this.processQueue();
   }
 
   cleanup(): void {

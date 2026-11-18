@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import './styles/reset.css';
 import './styles/global.css';
+import './styles/ui.css';
 import './i18n';
 
 createRoot(document.getElementById('root')!).render(

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-type ConnectionState = 'connected' | 'disconnected' | 'reconnecting';
+export type ConnectionState = 'connecting' | 'connected' | 'disconnected' | 'reconnecting';
 
 interface ConnectionStoreState {
   state: ConnectionState;
@@ -8,6 +8,6 @@ interface ConnectionStoreState {
 }
 
 export const useConnectionStore = create<ConnectionStoreState>((set) => ({
-  state: 'connected',
+  state: 'connecting',
   setState: (state) => set({ state }),
 }));

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { request, type RequestResult } from '../services/request';
 import type { CommandName } from '../services/commands';
 
@@ -18,14 +18,19 @@ export function useRequest<T = unknown>(
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const enabled = options?.enabled ?? true;
+  // Re-fetch when the arguments change (e.g. another folder), not on every render.
+  const kwargsKey = JSON.stringify(kwargs ?? {});
+  const latest = useRef(0);
 
   const fetchData = useCallback(async () => {
     if (!enabled) return;
 
+    const ticket = ++latest.current;
     setIsLoading(true);
     setError(null);
 
-    const result: RequestResult<T> = await request<T>(command, kwargs);
+    const result: RequestResult<T> = await request<T>(command, JSON.parse(kwargsKey));
+    if (ticket !== latest.current) return; // a newer request superseded this one
 
     if (result.error) {
       setError(result.error);
@@ -35,10 +40,10 @@ export function useRequest<T = unknown>(
     }
 
     setIsLoading(false);
-  }, [command, enabled]);
+  }, [command, enabled, kwargsKey]);
 
   useEffect(() => {
-    fetchData();
+    void fetchData();
   }, [fetchData]);
 
   return { data, error, isLoading, refetch: fetchData };

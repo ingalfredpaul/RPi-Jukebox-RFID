@@ -13,6 +13,9 @@ const COMMANDS: Record<string, CommandDefinition> = {
   play_single: { package: 'player', plugin: 'ctrl', method: 'play_single' },
   play_album: { package: 'player', plugin: 'ctrl', method: 'play_album' },
   play_folder: { package: 'player', plugin: 'ctrl', method: 'play_folder' },
+  play_card: { package: 'player', plugin: 'ctrl', method: 'play_card' },
+  playlistinfo: { package: 'player', plugin: 'ctrl', method: 'playlistinfo' },
+  stop: { package: 'player', plugin: 'ctrl', method: 'stop' },
   prev_song: { package: 'player', plugin: 'ctrl', method: 'prev' },
   next_song: { package: 'player', plugin: 'ctrl', method: 'next' },
   seek: { package: 'player', plugin: 'ctrl', method: 'seek' },
@@ -38,6 +41,14 @@ const COMMANDS: Record<string, CommandDefinition> = {
   songList: { package: 'player', plugin: 'ctrl', method: 'list_songs_by_artist_and_album' },
   getSongByUrl: { package: 'player', plugin: 'ctrl', method: 'get_song_by_url' },
   folderList: { package: 'player', plugin: 'ctrl', method: 'get_folder_content' },
+
+  // Kids mode plugin (src/jukebox/components/kidsbox). Optional: only present
+  // when `kidsbox` shows up in `core.plugins.loaded`.
+  kidsbox_play_card: { package: 'kidsbox', plugin: 'play_card', method: null },
+  kidsbox_get_config: { package: 'kidsbox', plugin: 'get_config', method: null },
+  kidsbox_set_folder_resume: { package: 'kidsbox', plugin: 'set_folder_resume', method: null },
+  kidsbox_set_resume_default: { package: 'kidsbox', plugin: 'set_resume_default', method: null },
+  kidsbox_clear_resume: { package: 'kidsbox', plugin: 'clear_resume', method: null },
 
   // Cards - no method, plugin IS the action
   cardsList: { package: 'cards', plugin: 'list_cards', method: null },

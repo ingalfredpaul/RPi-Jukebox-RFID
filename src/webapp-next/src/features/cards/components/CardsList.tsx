@@ -1,57 +1,60 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useRequest } from '../../../hooks/useRequest';
 import { Header } from '../../../components/Header';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { describeCard } from '../cardUtils';
+import { useCards } from '../useCards';
 import styles from '../cards.module.css';
-
-interface Card {
-  id: string;
-  from_alias: string;
-}
 
 export function CardsList() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { data, isLoading } = useRequest<Record<string, Card>>('cardsList');
+  const { cards, error, reload } = useCards();
 
-  const cards = data ? Object.entries(data).map(([id, card]) => ({ ...card, id })) : [];
+  if (error) {
+    return (
+      <>
+        <Header title={t('cards.title')} />
+        <div className="ui-empty">
+          <p>{t('general.loading-error')}</p>
+          <button className="ui-btn" onClick={() => void reload()} style={{ marginTop: 12 }}>
+            {t('general.buttons.retry')}
+          </button>
+        </div>
+      </>
+    );
+  }
+  if (!cards) return <LoadingSpinner />;
 
-  if (isLoading) return <LoadingSpinner />;
+  const entries = Object.entries(cards).sort(([a], [b]) => a.localeCompare(b));
 
   return (
-    <div className={styles.page}>
+    <div>
       <Header title={t('cards.title')} />
-
-      {cards.length === 0 ? (
-        <div className={styles.empty}>
-          <span className={styles.emptyIcon}>💳</span>
+      {entries.length === 0 ? (
+        <div className="ui-empty">
+          <div style={{ fontSize: '3rem' }} aria-hidden="true">💳</div>
           <p>{t('cards.overview.no-cards')}</p>
+          <p className="ui-hint" style={{ marginTop: 8 }}>{t('cards.overview.no-cards-hint')}</p>
         </div>
       ) : (
-        <div className={styles.list}>
-          {cards.map((card) => (
-            <div
-              key={card.id}
-              className={styles.cardItem}
-              onClick={() => navigate(`/cards/${card.id}/edit`)}
-            >
-              <div className={styles.cardIcon}>💳</div>
-              <div className={styles.cardInfo}>
-                <div className={styles.cardId}>{card.id}</div>
-                <div className={styles.cardAlias}>{card.from_alias || '–'}</div>
-              </div>
-              <span className={styles.cardAction}>→</span>
-            </div>
-          ))}
+        <div className="ui-list">
+          {entries.map(([id, entry]) => {
+            const d = describeCard(entry, t);
+            return (
+              <button key={id} className={styles.cardRow} onClick={() => navigate(`/cards/edit/${encodeURIComponent(id)}`)}>
+                <span className="ui-icon" aria-hidden="true">{d.icon}</span>
+                <span className="ui-grow">
+                  <span className="ui-wrap-anywhere" style={{ display: 'block', fontWeight: 500 }}>{d.text}</span>
+                  <span className={styles.cardId}>{id}</span>
+                </span>
+                <span aria-hidden="true">›</span>
+              </button>
+            );
+          })}
         </div>
       )}
-
-      <button
-        className={styles.fab}
-        onClick={() => navigate('/cards/register')}
-        aria-label={t('cards.overview.register-new')}
-      >
+      <button className={styles.fab} onClick={() => navigate('/cards/new')} aria-label={t('cards.overview.register-new')}>
         +
       </button>
     </div>

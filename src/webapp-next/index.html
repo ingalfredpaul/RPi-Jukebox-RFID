@@ -2,15 +2,26 @@
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-    <meta name="theme-color" content="#0d1117" />
+    <!-- viewport-fit=cover: use the full screen on notched phones; CSS handles the safe areas. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f6f8fa" media="(prefers-color-scheme: light)" />
+    <meta name="color-scheme" content="dark light" />
     <meta name="description" content="Phoniebox - Kinder-Musikbox" />
+
+    <!-- "Zum Home-Bildschirm" (iOS Safari / Android Chrome) -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Phoniebox" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="manifest" href="/manifest.json" />
     <title>Phoniebox</title>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>Für die Phoniebox-Oberfläche wird JavaScript benötigt.</noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

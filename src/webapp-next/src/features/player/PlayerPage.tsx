@@ -1,23 +1,23 @@
-import { useSocketInit } from '../../hooks/useSocket';
 import { usePlayerStore } from '../../stores/playerStore';
 import { Cover } from './components/Cover';
 import { Display } from './components/Display';
 import { SeekBar } from './components/SeekBar';
 import { Controls } from './components/Controls';
 import { Volume } from './components/Volume';
+import { SleepTimer } from './components/SleepTimer';
 import styles from './player.module.css';
 
+/**
+ * Kid-facing screen: always usable without the parent PIN.
+ * (The socket connection itself is opened once in App.tsx.)
+ */
 export function PlayerPage() {
-  useSocketInit();
   const coverUrl = usePlayerStore((s) => s.coverUrl);
 
   return (
     <div className={styles.page}>
       {coverUrl && (
-        <div
-          className={styles.backdrop}
-          style={{ backgroundImage: `url(${coverUrl})` }}
-        />
+        <div className={styles.backdrop} style={{ backgroundImage: `url(${coverUrl})` }} />
       )}
       <div className={styles.content}>
         <Cover />
@@ -25,6 +25,7 @@ export function PlayerPage() {
         <SeekBar />
         <Controls />
         <Volume />
+        <SleepTimer />
       </div>
     </div>
   );
