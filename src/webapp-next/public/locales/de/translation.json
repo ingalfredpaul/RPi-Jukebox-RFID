@@ -19,8 +19,8 @@
       "create": "Anlegen"
     },
     "loading": "Laden...",
-    "loading-error": "Das konnte nicht geladen werden.",
-    "no-results": "Keine Ergebnisse",
+    "loadingerror": "Das konnte nicht geladen werden.",
+    "noresults": "Keine Ergebnisse",
     "connection": {
       "connected": "Verbunden",
       "disconnected": "Die Box ist nicht erreichbar",
@@ -28,8 +28,8 @@
       "connecting": "Verbinde mit der Box …",
       "hint": "Ist sie eingeschaltet und im WLAN? Die Seite versucht es automatisch weiter."
     },
-    "drag-drop": "Dateien hierher ziehen oder klicken",
-    "drag-drop-active": "Dateien hier ablegen..."
+    "dragdrop": "Dateien hierher ziehen oder klicken",
+    "dragdropactive": "Dateien hier ablegen..."
   },
   "navigation": {
     "player": "Player",
@@ -50,14 +50,14 @@
       "repeat": "Wiederholen"
     },
     "cover": {
-      "no-cover": "Kein Cover",
+      "nocover": "Kein Cover",
       "alt": "Cover"
     },
     "display": {
-      "no-title": "Kein Titel",
-      "no-artist": "Unbekannter Künstler",
-      "no-album": "Unbekanntes Album",
-      "not-playing": "Es spielt gerade nichts",
+      "notitle": "Kein Titel",
+      "noartist": "Unbekannter Künstler",
+      "noalbum": "Unbekanntes Album",
+      "notplaying": "Es spielt gerade nichts",
       "stopped": "Gestoppt"
     },
     "seekbar": {
@@ -77,11 +77,11 @@
       "title": "Equalizer",
       "presets": "Voreinstellungen",
       "flat": "Flach",
-      "bass-boost": "Bass Boost",
-      "treble-boost": "Höhen Boost",
+      "bassboost": "Bass Boost",
+      "trebleboost": "Höhen Boost",
       "vocal": "Stimme",
       "reset": "Zurücksetzen",
-      "save-preset": "Voreinstellung speichern",
+      "savepreset": "Voreinstellung speichern",
       "hz": "Hz",
       "khz": "kHz",
       "db": "dB"
@@ -90,8 +90,8 @@
       "button": "Einschlaf-Timer",
       "running": "Noch {{minutes}} Min.",
       "title": "Einschlaf-Timer",
-      "mode-stop": "Musik anhalten",
-      "mode-fade": "Leiser werden und Box ausschalten",
+      "modestop": "Musik anhalten",
+      "modefade": "Leiser werden und Box ausschalten",
       "min": "Min.",
       "started": "Einschlaf-Timer: {{minutes}} Minuten",
       "canceled": "Einschlaf-Timer beendet",
@@ -102,40 +102,40 @@
   "library": {
     "search": {
       "placeholder": "Suchen...",
-      "no-results": "Keine Ergebnisse gefunden"
+      "noresults": "Keine Ergebnisse gefunden"
     },
     "albums": {
       "title": "Alben",
-      "no-albums": "Keine Alben vorhanden",
+      "noalbums": "Keine Alben vorhanden",
       "hint": "Alben erscheinen, wenn die Dateien Album-Tags haben. Für Ordner nutze den Reiter Ordner."
     },
     "folders": {
       "title": "Ordner",
-      "no-folders": "Keine Ordner vorhanden",
+      "nofolders": "Keine Ordner vorhanden",
       "back": "Zurück",
       "root": "Alle Ordner",
       "path": "Pfad",
       "playing": "Spielt: {{name}}",
-      "play-folder": "{{name}} abspielen",
-      "empty-hint": "Eltern können über „Verwalten“ Musik hochladen."
+      "playfolder": "{{name}} abspielen",
+      "emptyhint": "Eltern können über „Verwalten“ Musik hochladen."
     },
     "songs": {
       "title": "Titel",
-      "play-all": "Alle abspielen"
+      "playall": "Alle abspielen"
     },
     "selector": {
       "albums": "Alben",
       "folders": "Ordner"
     },
-    "file-manager": {
+    "filemanager": {
       "title": "Dateien verwalten",
       "upload": "Hochladen",
-      "upload-folder": "Ordner hochladen",
-      "new-folder": "Neuer Ordner",
-      "delete-confirm": "Möchtest du diese Datei wirklich löschen?",
+      "uploadfolder": "Ordner hochladen",
+      "newfolder": "Neuer Ordner",
+      "deleteconfirm": "Möchtest du diese Datei wirklich löschen?",
       "uploading": "Wird hochgeladen...",
-      "upload-success": "Upload erfolgreich",
-      "upload-error": "Upload fehlgeschlagen"
+      "uploadsuccess": "Upload erfolgreich",
+      "uploaderror": "Upload fehlgeschlagen"
     },
     "playlist": {
       "title": "Wiedergabeliste",
@@ -149,17 +149,17 @@
       "open": "Verwalten",
       "done": "Fertig",
       "actions": "Aktionen für {{name}}",
-      "assign-card": "Karte zuordnen",
-      "rename-title": "Umbenennen",
-      "new-name": "Neuer Name",
-      "rename-hint": "Tipp: Ordnernamen sind auch die Namen, die später in der Karten-Liste stehen.",
+      "assigncard": "Karte zuordnen",
+      "renametitle": "Umbenennen",
+      "newname": "Neuer Name",
+      "renamehint": "Tipp: Ordnernamen sind auch die Namen, die später in der Karten-Liste stehen.",
       "renamed": "Umbenannt",
       "deleted": "Gelöscht",
       "created": "Ordner angelegt",
-      "delete-title": "Wirklich löschen?",
-      "delete-folder-confirm": "Der Ordner „{{name}}“ und alles darin wird unwiderruflich von der Box gelöscht. Karten, die darauf zeigen, spielen dann nichts mehr.",
-      "delete-file-confirm": "Die Datei „{{name}}“ wird unwiderruflich von der Box gelöscht.",
-      "folder-name": "Name des Ordners",
+      "deletetitle": "Wirklich löschen?",
+      "deletefolderconfirm": "Der Ordner „{{name}}“ und alles darin wird unwiderruflich von der Box gelöscht. Karten, die darauf zeigen, spielen dann nichts mehr.",
+      "deletefileconfirm": "Die Datei „{{name}}“ wird unwiderruflich von der Box gelöscht.",
+      "foldername": "Name des Ordners",
       "failed": "Das hat nicht geklappt."
     }
   },
@@ -167,41 +167,41 @@
     "title": "RFID-Karten",
     "overview": {
       "title": "Übersicht",
-      "no-cards": "Keine Karten registriert",
-      "register-new": "Neue Karte",
-      "no-cards-hint": "Tippe auf +, lege dann eine Karte auf den Leser."
+      "nocards": "Keine Karten registriert",
+      "registernew": "Neue Karte",
+      "nocardshint": "Tippe auf +, lege dann eine Karte auf den Leser."
     },
     "register": {
       "title": "Neue Karte",
       "waiting": "Lege jetzt eine Karte auf den Leser",
-      "card-id": "Kartennummer",
+      "cardid": "Kartennummer",
       "card": "Karte",
-      "waiting-hint": "Die Kartennummer erscheint hier automatisch.",
-      "type-id": "Nummer von Hand eingeben",
+      "waitinghint": "Die Kartennummer erscheint hier automatisch.",
+      "typeid": "Nummer von Hand eingeben",
       "already": "Diese Karte ist schon belegt: {{what}}. Speichern ersetzt das.",
-      "other-card": "Andere Karte auflegen, um zu wechseln."
+      "othercard": "Andere Karte auflegen, um zu wechseln."
     },
     "edit": {
       "title": "Karte bearbeiten",
       "delete": "Karte löschen",
-      "delete-confirm": "Die Zuordnung wird gelöscht. Die Musik bleibt auf der Box."
+      "deleteconfirm": "Die Zuordnung wird gelöscht. Die Musik bleibt auf der Box."
     },
     "form": {
-      "action-type": "Aktionstyp",
-      "select-action": "Aktion auswählen",
+      "actiontype": "Aktionstyp",
+      "selectaction": "Aktion auswählen",
       "what": "Was soll die Karte tun?",
-      "kind-folder": "Musik oder Hörbuch",
-      "kind-special": "Steuerkarte",
+      "kindfolder": "Musik oder Hörbuch",
+      "kindspecial": "Steuerkarte",
       "folder": "Ordner",
-      "none-selected": "noch keiner gewählt",
-      "no-subfolders": "Keine Unterordner",
-      "open-folder": "{{name}} öffnen",
-      "choose-this-folder": "„{{name}}“ wählen",
+      "noneselected": "noch keiner gewählt",
+      "nosubfolders": "Keine Unterordner",
+      "openfolder": "{{name}} öffnen",
+      "choosethisfolder": "„{{name}}“ wählen",
       "resume": "Position merken (Hörbuch)",
-      "resume-hint": "Aus: Musik startet immer von vorn. An: macht beim nächsten Auflegen dort weiter, wo es aufgehört hat.",
-      "no-kidsbox": "Das Kinder-Plugin der Box ist nicht aktiv (siehe deploy/INSTALL.md). Die Karte spielt den Ordner dann ohne Merken der Position.",
-      "save-failed": "Speichern fehlgeschlagen",
-      "delete-failed": "Löschen fehlgeschlagen"
+      "resumehint": "Aus: Musik startet immer von vorn. An: macht beim nächsten Auflegen dort weiter, wo es aufgehört hat.",
+      "nokidsbox": "Das Kinder-Plugin der Box ist nicht aktiv (siehe deploy/INSTALL.md). Die Karte spielt den Ordner dann ohne Merken der Position.",
+      "savefailed": "Speichern fehlgeschlagen",
+      "deletefailed": "Löschen fehlgeschlagen"
     },
     "actions": {
       "play_music": "Musik abspielen",
@@ -248,15 +248,15 @@
       "folder": "Spielt: {{folder}}"
     },
     "special": {
-      "volume-up": "Lauter",
-      "volume-down": "Leiser",
+      "volumeup": "Lauter",
+      "volumedown": "Leiser",
       "pause": "Pause",
       "toggle": "Play / Pause",
       "next": "Nächster Titel",
       "prev": "Vorheriger Titel",
-      "sleep-30": "Schlafen (30 Min., ausblenden + aus)",
-      "sleep-15": "Schlafen (15 Min., ausblenden + aus)",
-      "stop-30": "Musik stoppen in 30 Min.",
+      "sleep30": "Schlafen (30 Min., ausblenden + aus)",
+      "sleep15": "Schlafen (15 Min., ausblenden + aus)",
+      "stop30": "Musik stoppen in 30 Min.",
       "shutdown": "Box ausschalten"
     },
     "scan": {
@@ -269,20 +269,20 @@
     "status": {
       "title": "System-Status",
       "version": "Version",
-      "cpu-temp": "CPU-Temperatur",
-      "disk-usage": "Speicher",
-      "ip-address": "IP-Adresse",
+      "cputemp": "CPU-Temperatur",
+      "diskusage": "Speicher",
+      "ipaddress": "IP-Adresse",
       "battery": "Akku",
       "uptime": "Laufzeit",
-      "disk-free": "{{free}} frei von {{total}}"
+      "diskfree": "{{free}} frei von {{total}}"
     },
     "audio": {
       "title": "Audio",
       "output": "Audio-Ausgang",
       "speaker": "Lautsprecher",
       "bluetooth": "Bluetooth",
-      "max-volume": "Maximale Lautstärke",
-      "max-volume-hint": "Begrenzt die Lautstärke für Kinder"
+      "maxvolume": "Maximale Lautstärke",
+      "maxvolumehint": "Begrenzt die Lautstärke für Kinder"
     },
     "equalizer": {
       "title": "Equalizer",
@@ -290,16 +290,16 @@
     },
     "general": {
       "title": "Allgemein",
-      "show-covers": "Cover-Art anzeigen",
+      "showcovers": "Cover-Art anzeigen",
       "language": "Sprache"
     },
     "timers": {
       "title": "Timer",
       "shutdown": "Ausschalt-Timer",
-      "stop-player": "Musik stoppen nach",
-      "fade-volume": "Ausblenden und Box ausschalten in",
-      "idle-shutdown": "Bei Inaktivität ausschalten",
-      "set-timer": "Timer einstellen",
+      "stopplayer": "Musik stoppen nach",
+      "fadevolume": "Ausblenden und Box ausschalten in",
+      "idleshutdown": "Bei Inaktivität ausschalten",
+      "settimer": "Timer einstellen",
       "minutes": "Minuten",
       "active": "Aktiv",
       "inactive": "Inaktiv",
@@ -307,7 +307,7 @@
       "remaining": "noch {{minutes}} Min.",
       "change": "Ändern oder beenden"
     },
-    "sleep-mode": {
+    "sleepmode": {
       "title": "Ruhemodus",
       "enable": "Automatischen Ruhemodus aktivieren",
       "timeout": "Ruhemodus nach Inaktivität",
@@ -317,15 +317,15 @@
       "title": "System",
       "reboot": "Neustart",
       "shutdown": "Herunterfahren",
-      "reboot-confirm": "Phoniebox wirklich neustarten?",
-      "shutdown-confirm": "Phoniebox wirklich herunterfahren?",
+      "rebootconfirm": "Phoniebox wirklich neustarten?",
+      "shutdownconfirm": "Phoniebox wirklich herunterfahren?",
       "autohotspot": "Auto-Hotspot",
-      "autohotspot-hint": "Erstellt einen eigenen WLAN-Hotspot wenn kein Netzwerk verfügbar ist",
+      "autohotspothint": "Erstellt einen eigenen WLAN-Hotspot wenn kein Netzwerk verfügbar ist",
       "hint": "Ausschalten ist nur an der Box selbst (Strom) wieder einschaltbar.",
-      "reboot-started": "Box startet neu …",
-      "shutdown-started": "Box fährt herunter …"
+      "rebootstarted": "Box startet neu …",
+      "shutdownstarted": "Box fährt herunter …"
     },
-    "second-swipe": {
+    "secondswipe": {
       "title": "Zweites Auflegen",
       "description": "Was passiert wenn die gleiche Karte nochmal aufgelegt wird?",
       "options": {
@@ -343,54 +343,54 @@
     "connect": "Mit Spotify verbinden",
     "disconnect": "Spotify trennen",
     "connected": "Verbunden",
-    "not-connected": "Nicht verbunden",
+    "notconnected": "Nicht verbunden",
     "search": {
       "placeholder": "Songs, Alben, Playlists suchen...",
-      "no-results": "Keine Ergebnisse"
+      "noresults": "Keine Ergebnisse"
     },
     "playlists": {
       "title": "Playlists",
-      "no-playlists": "Keine Playlists"
+      "noplaylists": "Keine Playlists"
     },
-    "now-playing": "Wird abgespielt"
+    "nowplaying": "Wird abgespielt"
   },
   "radio": {
     "title": "Radio & Podcasts",
     "stations": {
       "title": "Radiosender",
       "add": "Sender hinzufügen",
-      "no-stations": "Keine Sender gespeichert",
+      "nostations": "Keine Sender gespeichert",
       "url": "Stream-URL",
       "name": "Sendername"
     },
     "podcasts": {
       "title": "Podcasts",
       "add": "Podcast hinzufügen",
-      "no-podcasts": "Keine Podcasts",
+      "nopodcasts": "Keine Podcasts",
       "resume": "Fortsetzen bei",
       "episodes": "Folgen"
     }
   },
   "upload": {
     "title": "Dateien hochladen",
-    "drag-files": "Audio-Dateien hierher ziehen",
-    "drag-folder": "Ordner hierher ziehen",
-    "or-click": "oder klicken zum Auswählen",
+    "dragfiles": "Audio-Dateien hierher ziehen",
+    "dragfolder": "Ordner hierher ziehen",
+    "orclick": "oder klicken zum Auswählen",
     "progress": "{{current}} von {{total}} hochgeladen",
     "complete": "Upload abgeschlossen",
     "error": "Fehler beim Hochladen von {{file}}",
     "target": "Ziel auf der Box",
-    "new-folder-label": "In neuen Unterordner hochladen (optional)",
-    "new-folder-placeholder": "z. B. Pumuckl",
-    "new-folder-hint": "Mehrere Dateien landen so zusammen in einem Ordner, der sich später einer Karte zuordnen lässt.",
-    "pick-files": "Dateien wählen",
-    "pick-folder": "Ordner wählen",
+    "newfolderlabel": "In neuen Unterordner hochladen (optional)",
+    "newfolderplaceholder": "z. B. Pumuckl",
+    "newfolderhint": "Mehrere Dateien landen so zusammen in einem Ordner, der sich später einer Karte zuordnen lässt.",
+    "pickfiles": "Dateien wählen",
+    "pickfolder": "Ordner wählen",
     "formats": "Erlaubt: {{list}}",
     "free": "Frei auf der Box: {{size}}",
-    "service-down": "Der Upload-Dienst ist nicht erreichbar.",
+    "servicedown": "Der Upload-Dienst ist nicht erreichbar.",
     "queue": "Warteschlange ({{done}} von {{total}} fertig)",
-    "cancel-all": "Alles abbrechen",
-    "retry-failed": "{{count}} fehlgeschlagene wiederholen",
+    "cancelall": "Alles abbrechen",
+    "retryfailed": "{{count}} fehlgeschlagene wiederholen",
     "clear": "Liste leeren",
     "status": {
       "queued": "Wartet …",
@@ -398,70 +398,70 @@
       "replaced": "vorhandene Datei ersetzt",
       "canceled": "Abgebrochen"
     },
-    "screen-on": "Der Bildschirm bleibt während des Uploads an. Diese Seite offen lassen.",
-    "keep-open": "Bitte Seite offen lassen und den Bildschirm nicht sperren, sonst pausiert das Handy den Upload.",
+    "screenon": "Der Bildschirm bleibt während des Uploads an. Diese Seite offen lassen.",
+    "keepopen": "Bitte Seite offen lassen und den Bildschirm nicht sperren, sonst pausiert das Handy den Upload.",
     "skipped": "{{count}} Datei(en) übersprungen",
     "skip": {
       "extension": "Dateityp nicht erlaubt",
       "hidden": "versteckte Datei",
-      "too-big": "zu groß",
+      "toobig": "zu groß",
       "empty": "leer"
     },
-    "tips-title": "Hinweise",
-    "tip-lock": "Sperrt sich das Handy, wird der Upload oft angehalten. Nach dem Entsperren kannst du fehlgeschlagene Dateien wiederholen.",
-    "tip-ios": "iPhone/iPad: Ganze Ordner auswählen geht dort meist nicht. Wähle stattdessen mehrere Dateien und gib oben einen neuen Ordnernamen an.",
-    "tip-wifi": "Große Hörbücher laufen am schnellsten, wenn das Handy nah am Router ist. Der Zero 2 W nimmt Dateien nacheinander an."
+    "tipstitle": "Hinweise",
+    "tiplock": "Sperrt sich das Handy, wird der Upload oft angehalten. Nach dem Entsperren kannst du fehlgeschlagene Dateien wiederholen.",
+    "tipios": "iPhone/iPad: Ganze Ordner auswählen geht dort meist nicht. Wähle stattdessen mehrere Dateien und gib oben einen neuen Ordnernamen an.",
+    "tipwifi": "Große Hörbücher laufen am schnellsten, wenn das Handy nah am Router ist. Der Zero 2 W nimmt Dateien nacheinander an."
   },
   "toast": {
-    "card-registered": "Karte erfolgreich registriert",
-    "card-deleted": "Karte gelöscht",
-    "settings-saved": "Einstellungen gespeichert",
-    "upload-complete": "Upload abgeschlossen",
-    "error-generic": "Ein Fehler ist aufgetreten",
-    "settings-failed": "Das hat nicht geklappt"
+    "cardregistered": "Karte erfolgreich registriert",
+    "carddeleted": "Karte gelöscht",
+    "settingssaved": "Einstellungen gespeichert",
+    "uploadcomplete": "Upload abgeschlossen",
+    "errorgeneric": "Ein Fehler ist aufgetreten",
+    "settingsfailed": "Das hat nicht geklappt"
   },
   "parent": {
-    "locked-title": "Elternbereich",
-    "locked-text": "Bitte PIN eingeben.",
+    "lockedtitle": "Elternbereich",
+    "lockedtext": "Bitte PIN eingeben.",
     "pin": "PIN",
     "unlock": "Entsperren",
-    "wrong-pin": "Falsche PIN.",
-    "too-many": "Zu viele Versuche. Bitte 30 Sekunden warten.",
-    "lock-now": "Sperren",
-    "pin-title": "PIN-Sperre (Elternmodus)",
-    "pin-active": "Die PIN-Sperre ist auf diesem Gerät aktiv. Karten, Einstellungen und Dateiverwaltung sind geschützt.",
-    "pin-none": "Noch keine PIN gesetzt: Kinder kommen an alle Einstellungen. Lege eine PIN fest.",
-    "pin-current": "Aktuelle PIN",
-    "pin-choose": "Neue PIN (4 bis 8 Ziffern)",
-    "pin-new": "Neue PIN (4 bis 8 Ziffern)",
-    "pin-repeat": "PIN wiederholen",
-    "pin-saved": "PIN gespeichert",
-    "pin-removed": "PIN entfernt",
-    "pin-remove": "PIN-Sperre ausschalten",
-    "pin-disclaimer": "Das ist nur eine Kindersicherung, kein Schutz vor Angreifern: Die PIN wird nur in diesem Browser gespeichert und gilt nur für dieses Gerät. Auf einem zweiten Handy oder Rechner musst du sie erneut einrichten."
+    "wrongpin": "Falsche PIN.",
+    "toomany": "Zu viele Versuche. Bitte 30 Sekunden warten.",
+    "locknow": "Sperren",
+    "pintitle": "PIN-Sperre (Elternmodus)",
+    "pinactive": "Die PIN-Sperre ist auf diesem Gerät aktiv. Karten, Einstellungen und Dateiverwaltung sind geschützt.",
+    "pinnone": "Noch keine PIN gesetzt: Kinder kommen an alle Einstellungen. Lege eine PIN fest.",
+    "pincurrent": "Aktuelle PIN",
+    "pinchoose": "Neue PIN (4 bis 8 Ziffern)",
+    "pinnew": "Neue PIN (4 bis 8 Ziffern)",
+    "pinrepeat": "PIN wiederholen",
+    "pinsaved": "PIN gespeichert",
+    "pinremoved": "PIN entfernt",
+    "pinremove": "PIN-Sperre ausschalten",
+    "pindisclaimer": "Das ist nur eine Kindersicherung, kein Schutz vor Angreifern: Die PIN wird nur in diesem Browser gespeichert und gilt nur für dieses Gerät. Auf einem zweiten Handy oder Rechner musst du sie erneut einrichten."
   },
   "kids": {
     "title": "Kinder & Eltern",
-    "max-volume": "Höchste Lautstärke",
-    "max-volume-hint": "Gehörschutz: Kinder können die Box nicht lauter stellen. Gilt auch für Karten.",
-    "max-volume-warn": "Über 80 % kann für Kinderohren zu laut sein.",
-    "volume-jump": "Größter Lautstärke-Sprung",
-    "volume-jump-hint": "Mit einer Wischbewegung oder einem Tipp ändert sich die Lautstärke höchstens so weit. Gilt nur auf diesem Handy.",
+    "maxvolume": "Höchste Lautstärke",
+    "maxvolumehint": "Gehörschutz: Kinder können die Box nicht lauter stellen. Gilt auch für Karten.",
+    "maxvolumewarn": "Über 80 % kann für Kinderohren zu laut sein.",
+    "volumejump": "Größter Lautstärke-Sprung",
+    "volumejumphint": "Mit einer Wischbewegung oder einem Tipp ändert sich die Lautstärke höchstens so weit. Gilt nur auf diesem Handy.",
     "unlimited": "unbegrenzt",
     "points": "{{count}} Punkte",
     "idle": "Automatisch ausschalten, wenn nichts passiert",
-    "idle-hint": "Nach dieser Zeit ohne Musik schaltet sich die Box aus (spart Strom, schützt die SD-Karte).",
+    "idlehint": "Nach dieser Zeit ohne Musik schaltet sich die Box aus (spart Strom, schützt die SD-Karte).",
     "off": "aus",
     "minutes": "{{count}} Minuten",
-    "resume-default": "Position bei allen Ordnern merken",
-    "resume-default-hint": "Gilt für Karten ohne eigene Einstellung. Besser pro Karte nur bei Hörbüchern einschalten.",
-    "rules-title": "Das macht die Box mit Karten",
-    "rule-same-card": "Dieselbe Karte nochmal auflegen: Wiedergabe läuft weiter (oder geht nach Pause weiter), nie von vorn.",
-    "rule-fade": "Anderer Ordner: erst kurz leiser ({{ms}} ms), dann wechseln, ohne Knall.",
-    "rule-nofade": "Anderer Ordner: sofortiger Wechsel (Ausblenden ist aus).",
-    "rule-unknown-sound": "Unbekannte Karte: kurzer Signalton.",
-    "rule-unknown-silent": "Unbekannte Karte: kein Ton, nur Hinweis im Handy.",
-    "rules-config": "Diese Regeln stehen in der Konfiguration der Box (kidsbox in jukebox.yaml).",
-    "no-plugin": "Das Kinder-Plugin der Box ist nicht aktiv. Lautstärke-Grenze und Ausschalt-Timer gehen trotzdem; Position merken und sanfter Wechsel brauchen das Plugin (siehe deploy/INSTALL.md)."
+    "resumedefault": "Position bei allen Ordnern merken",
+    "resumedefaulthint": "Gilt für Karten ohne eigene Einstellung. Besser pro Karte nur bei Hörbüchern einschalten.",
+    "rulestitle": "Das macht die Box mit Karten",
+    "rulesamecard": "Dieselbe Karte nochmal auflegen: Wiedergabe läuft weiter (oder geht nach Pause weiter), nie von vorn.",
+    "rulefade": "Anderer Ordner: erst kurz leiser ({{ms}} ms), dann wechseln, ohne Knall.",
+    "rulenofade": "Anderer Ordner: sofortiger Wechsel (Ausblenden ist aus).",
+    "ruleunknownsound": "Unbekannte Karte: kurzer Signalton.",
+    "ruleunknownsilent": "Unbekannte Karte: kein Ton, nur Hinweis im Handy.",
+    "rulesconfig": "Diese Regeln stehen in der Konfiguration der Box (kidsbox in jukebox.yaml).",
+    "noplugin": "Das Kinder-Plugin der Box ist nicht aktiv. Lautstärke-Grenze und Ausschalt-Timer gehen trotzdem; Position merken und sanfter Wechsel brauchen das Plugin (siehe deploy/INSTALL.md)."
   }
 }

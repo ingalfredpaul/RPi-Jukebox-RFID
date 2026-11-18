@@ -41,7 +41,7 @@ export function PodcastManager() {
       {podcasts.length === 0 ? (
         <div className={styles.empty}>
           <span className={styles.emptyIcon}>🎙</span>
-          <p>{t('radio.podcasts.no-podcasts')}</p>
+          <p>{t('radio.podcasts.nopodcasts')}</p>
         </div>
       ) : (
         <div className={styles.list}>

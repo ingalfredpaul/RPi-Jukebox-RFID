@@ -16,7 +16,7 @@ export function CardsList() {
       <>
         <Header title={t('cards.title')} />
         <div className="ui-empty">
-          <p>{t('general.loading-error')}</p>
+          <p>{t('general.loadingerror')}</p>
           <button className="ui-btn" onClick={() => void reload()} style={{ marginTop: 12 }}>
             {t('general.buttons.retry')}
           </button>
@@ -34,8 +34,8 @@ export function CardsList() {
       {entries.length === 0 ? (
         <div className="ui-empty">
           <div style={{ fontSize: '3rem' }} aria-hidden="true">💳</div>
-          <p>{t('cards.overview.no-cards')}</p>
-          <p className="ui-hint" style={{ marginTop: 8 }}>{t('cards.overview.no-cards-hint')}</p>
+          <p>{t('cards.overview.nocards')}</p>
+          <p className="ui-hint" style={{ marginTop: 8 }}>{t('cards.overview.nocardshint')}</p>
         </div>
       ) : (
         <div className="ui-list">
@@ -54,7 +54,7 @@ export function CardsList() {
           })}
         </div>
       )}
-      <button className={styles.fab} onClick={() => navigate('/cards/new')} aria-label={t('cards.overview.register-new')}>
+      <button className={styles.fab} onClick={() => navigate('/cards/new')} aria-label={t('cards.overview.registernew')}>
         +
       </button>
     </div>

@@ -25,7 +25,7 @@ export function FolderPicker({ value, onChange }: Props) {
 
   return (
     <div className="ui-field">
-      <span className="ui-label">{t('cards.form.folder')}: <strong>{value || t('cards.form.none-selected')}</strong></span>
+      <span className="ui-label">{t('cards.form.folder')}: <strong>{value || t('cards.form.noneselected')}</strong></span>
       <div className={styles.folderList}>
         {dir !== '' && (
           <button className={styles.folderRow} onClick={() => setDir(parentPath(dir))}>
@@ -34,9 +34,9 @@ export function FolderPicker({ value, onChange }: Props) {
           </button>
         )}
         {isLoading && <LoadingSpinner />}
-        {error && <div className="ui-banner ui-banner-error">{t('general.loading-error')}</div>}
+        {error && <div className="ui-banner ui-banner-error">{t('general.loadingerror')}</div>}
         {!isLoading && dirs.length === 0 && dir !== '' && (
-          <div className="ui-muted" style={{ padding: 12 }}>{t('cards.form.no-subfolders')}</div>
+          <div className="ui-muted" style={{ padding: 12 }}>{t('cards.form.nosubfolders')}</div>
         )}
         {dirs.map((item) => (
           <div key={item.relpath} className="ui-row" style={{ borderBottom: '1px solid var(--color-border)' }}>
@@ -49,7 +49,7 @@ export function FolderPicker({ value, onChange }: Props) {
               <span className="ui-icon">{value === item.relpath ? '✓' : '📁'}</span>
               <span className="ui-ellipsis">{item.name}</span>
             </button>
-            <button className="ui-btn" style={{ border: 'none', background: 'transparent' }} onClick={() => setDir(item.relpath)} aria-label={t('cards.form.open-folder', { name: item.name })}>
+            <button className="ui-btn" style={{ border: 'none', background: 'transparent' }} onClick={() => setDir(item.relpath)} aria-label={t('cards.form.openfolder', { name: item.name })}>
               ›
             </button>
           </div>
@@ -57,7 +57,7 @@ export function FolderPicker({ value, onChange }: Props) {
       </div>
       {dir !== '' && (
         <button className="ui-btn" onClick={() => onChange(dir)}>
-          {t('cards.form.choose-this-folder', { name: dir.split('/').pop() })}
+          {t('cards.form.choosethisfolder', { name: dir.split('/').pop() })}
         </button>
       )}
     </div>

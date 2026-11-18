@@ -39,7 +39,7 @@ export function SongList() {
           className="ui-btn ui-btn-primary"
           onClick={() => request('play_album', { albumartist: decodedArtist, album: decodedAlbum })}
         >
-          ▶ {t('library.songs.play-all')}
+          ▶ {t('library.songs.playall')}
         </button>
       </div>
 

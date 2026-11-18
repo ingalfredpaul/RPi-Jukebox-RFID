@@ -97,10 +97,10 @@ export function CardWizard() {
     }
     setBusy(false);
     if (error) {
-      showToast('error', t('cards.form.save-failed'));
+      showToast('error', t('cards.form.savefailed'));
       return;
     }
-    showToast('success', t('toast.card-registered'));
+    showToast('success', t('toast.cardregistered'));
     await reload();
     navigate('/cards');
   };
@@ -111,10 +111,10 @@ export function CardWizard() {
     setBusy(false);
     setConfirmDelete(false);
     if (error) {
-      showToast('error', t('cards.form.delete-failed'));
+      showToast('error', t('cards.form.deletefailed'));
       return;
     }
-    showToast('success', t('toast.card-deleted'));
+    showToast('success', t('toast.carddeleted'));
     navigate('/cards');
   };
 
@@ -135,22 +135,22 @@ export function CardWizard() {
                     {t('cards.register.already', { what: describeCard(existing, t).text })}
                   </span>
                 )}
-                {!editing && <span className="ui-muted">{t('cards.register.other-card')}</span>}
+                {!editing && <span className="ui-muted">{t('cards.register.othercard')}</span>}
               </div>
             ) : (
               <div className={styles.scanBox}>
                 <span className={styles.pulse} aria-hidden="true">💳</span>
                 <strong>{t('cards.register.waiting')}</strong>
-                <span className="ui-muted">{t('cards.register.waiting-hint')}</span>
+                <span className="ui-muted">{t('cards.register.waitinghint')}</span>
               </div>
             )}
             {!editing && (
               <>
                 {!manual ? (
-                  <button className="ui-btn" onClick={() => setManual(true)}>{t('cards.register.type-id')}</button>
+                  <button className="ui-btn" onClick={() => setManual(true)}>{t('cards.register.typeid')}</button>
                 ) : (
                   <div className="ui-field">
-                    <label className="ui-label" htmlFor="cardid">{t('cards.register.card-id')}</label>
+                    <label className="ui-label" htmlFor="cardid">{t('cards.register.cardid')}</label>
                     <input id="cardid" className="ui-input" value={cardId} onChange={(e) => setCardId(e.target.value)} />
                   </div>
                 )}
@@ -170,7 +170,7 @@ export function CardWizard() {
                 className={`${styles.choice} ${kind === 'folder' ? styles.choiceActive : ''}`}
                 onClick={() => setKind('folder')}
               >
-                <span style={{ fontSize: '1.6rem' }}>📁</span>{t('cards.form.kind-folder')}
+                <span style={{ fontSize: '1.6rem' }}>📁</span>{t('cards.form.kindfolder')}
               </button>
               <button
                 role="radio"
@@ -178,7 +178,7 @@ export function CardWizard() {
                 className={`${styles.choice} ${kind === 'special' ? styles.choiceActive : ''}`}
                 onClick={() => setKind('special')}
               >
-                <span style={{ fontSize: '1.6rem' }}>🎛</span>{t('cards.form.kind-special')}
+                <span style={{ fontSize: '1.6rem' }}>🎛</span>{t('cards.form.kindspecial')}
               </button>
             </div>
 
@@ -190,11 +190,11 @@ export function CardWizard() {
                     <input type="checkbox" checked={resume} onChange={(e) => setResume(e.target.checked)} />
                     <span>
                       {t('cards.form.resume')}
-                      <span className="ui-hint" style={{ display: 'block' }}>{t('cards.form.resume-hint')}</span>
+                      <span className="ui-hint" style={{ display: 'block' }}>{t('cards.form.resumehint')}</span>
                     </span>
                   </label>
                 ) : (
-                  <div className="ui-banner ui-banner-warn">{t('cards.form.no-kidsbox')}</div>
+                  <div className="ui-banner ui-banner-warn">{t('cards.form.nokidsbox')}</div>
                 )}
               </>
             ) : (
@@ -208,7 +208,7 @@ export function CardWizard() {
                     onClick={() => setSpecial(s.key)}
                   >
                     <span style={{ fontSize: '1.4rem' }}>{s.icon}</span>
-                    {t(`cards.special.${s.key}`)}
+                    {t(`cards.special.${s.key.replace(/-/g, "")}`)}
                   </button>
                 ))}
               </div>
@@ -237,7 +237,7 @@ export function CardWizard() {
           </>
         }
       >
-        <p>{t('cards.edit.delete-confirm')}</p>
+        <p>{t('cards.edit.deleteconfirm')}</p>
       </Dialog>
     </div>
   );

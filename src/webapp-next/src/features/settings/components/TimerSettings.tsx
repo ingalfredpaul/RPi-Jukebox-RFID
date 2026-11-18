@@ -56,7 +56,7 @@ export function TimerSettings() {
           return (
             <div key={timer.key} className="ui-field">
               <label className="ui-label" htmlFor={`timer-${timer.key}`}>
-                {t(`settings.timers.${timer.key}`)}
+                {t(`settings.timers.${timer.key.replace(/-/g, "")}`)}
                 {' · '}
                 <strong>{active ? t('settings.timers.remaining', { minutes: remaining }) : t('settings.timers.inactive')}</strong>
               </label>
@@ -66,7 +66,7 @@ export function TimerSettings() {
                 value=""
                 onChange={(e) => void set(timer, Number(e.target.value))}
               >
-                <option value="" disabled>{active ? t('settings.timers.change') : t('settings.timers.set-timer')}</option>
+                <option value="" disabled>{active ? t('settings.timers.change') : t('settings.timers.settimer')}</option>
                 {active && <option value="0">{t('settings.timers.cancel')}</option>}
                 {TIMER_STEPS.filter((s) => s >= (timer.key === 'fade-volume' ? 5 : 1)).map((step) => (
                   <option key={step} value={step}>{step} {t('settings.timers.minutes')}</option>

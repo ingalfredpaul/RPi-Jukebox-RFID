@@ -89,11 +89,11 @@ export function SleepTimer() {
         <div className={styles.sleepMode}>
           <label className="ui-switch">
             <input type="radio" name="sleepmode" checked={mode === 'stop'} onChange={() => setMode('stop')} />
-            <span>{t('player.sleep.mode-stop')}</span>
+            <span>{t('player.sleep.modestop')}</span>
           </label>
           <label className="ui-switch">
             <input type="radio" name="sleepmode" checked={mode === 'fade'} onChange={() => setMode('fade')} />
-            <span>{t('player.sleep.mode-fade')}</span>
+            <span>{t('player.sleep.modefade')}</span>
           </label>
         </div>
         <div className={styles.sleepGrid}>

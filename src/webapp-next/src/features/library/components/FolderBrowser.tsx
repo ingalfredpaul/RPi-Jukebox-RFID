@@ -71,10 +71,10 @@ export function FolderBrowser({ mode }: { mode: 'play' | 'manage' }) {
       {mode === 'manage' ? (
         <div className={styles.toolbar}>
           <button className="ui-btn" onClick={() => { setText(''); setSheet({ kind: 'mkdir' }); }}>
-            📁 {t('library.file-manager.new-folder')}
+            📁 {t('library.filemanager.newfolder')}
           </button>
           <Link className="ui-btn ui-btn-primary" to={`/library/upload?dir=${encodeURIComponent(dir)}`}>
-            ↑ {t('library.file-manager.upload')}
+            ↑ {t('library.filemanager.upload')}
           </Link>
           <Link className="ui-btn" to={dir ? `/library/folders/${dir.split('/').map(encodeURIComponent).join('/')}` : '/library/folders'}>
             ✓ {t('library.manage.done')}
@@ -107,14 +107,14 @@ export function FolderBrowser({ mode }: { mode: 'play' | 'manage' }) {
       ) : error ? (
         <div className={styles.empty}>
           <span className={styles.emptyIcon}>📡</span>
-          <p>{t('general.loading-error')}</p>
+          <p>{t('general.loadingerror')}</p>
           <button className="ui-btn" onClick={refetch}>{t('general.buttons.retry')}</button>
         </div>
       ) : !data || data.length === 0 ? (
         <div className={styles.empty}>
           <span className={styles.emptyIcon}>📁</span>
-          <p>{t('library.folders.no-folders')}</p>
-          {mode === 'play' && <p className="ui-hint">{t('library.folders.empty-hint')}</p>}
+          <p>{t('library.folders.nofolders')}</p>
+          {mode === 'play' && <p className="ui-hint">{t('library.folders.emptyhint')}</p>}
         </div>
       ) : (
         <div className={styles.list}>
@@ -134,7 +134,7 @@ export function FolderBrowser({ mode }: { mode: 'play' | 'manage' }) {
                 {isDir && mode === 'play' && (
                   <button
                     className={styles.iconBtn}
-                    aria-label={t('library.folders.play-folder', { name: item.name })}
+                    aria-label={t('library.folders.playfolder', { name: item.name })}
                     onClick={() => playFolder(item.relpath)}
                   >
                     ▶
@@ -173,7 +173,7 @@ export function FolderBrowser({ mode }: { mode: 'play' | 'manage' }) {
                   className="ui-btn"
                   onClick={() => navigate(`/cards/new?folder=${encodeURIComponent(sheet.item.relpath)}`)}
                 >
-                  💳 {t('library.manage.assign-card')}
+                  💳 {t('library.manage.assigncard')}
                 </button>
               </>
             )}
@@ -191,7 +191,7 @@ export function FolderBrowser({ mode }: { mode: 'play' | 'manage' }) {
       <Dialog
         open={sheet?.kind === 'rename'}
         onClose={() => setSheet(null)}
-        title={t('library.manage.rename-title')}
+        title={t('library.manage.renametitle')}
         actions={
           <>
             <button className="ui-btn" onClick={() => setSheet(null)}>{t('general.buttons.cancel')}</button>
@@ -209,15 +209,15 @@ export function FolderBrowser({ mode }: { mode: 'play' | 'manage' }) {
           </>
         }
       >
-        <input className="ui-input" value={text} onChange={(e) => setText(e.target.value)} aria-label={t('library.manage.new-name')} />
-        <p className="ui-hint" style={{ marginTop: 8 }}>{t('library.manage.rename-hint')}</p>
+        <input className="ui-input" value={text} onChange={(e) => setText(e.target.value)} aria-label={t('library.manage.newname')} />
+        <p className="ui-hint" style={{ marginTop: 8 }}>{t('library.manage.renamehint')}</p>
       </Dialog>
 
       {/* delete */}
       <Dialog
         open={sheet?.kind === 'delete'}
         onClose={() => setSheet(null)}
-        title={t('library.manage.delete-title')}
+        title={t('library.manage.deletetitle')}
         actions={
           <>
             <button className="ui-btn" onClick={() => setSheet(null)}>{t('general.buttons.cancel')}</button>
@@ -237,8 +237,8 @@ export function FolderBrowser({ mode }: { mode: 'play' | 'manage' }) {
         {sheet?.kind === 'delete' && (
           <p>
             {sheet.item.type === 'directory'
-              ? t('library.manage.delete-folder-confirm', { name: sheet.item.name })
-              : t('library.manage.delete-file-confirm', { name: sheet.item.name })}
+              ? t('library.manage.deletefolderconfirm', { name: sheet.item.name })
+              : t('library.manage.deletefileconfirm', { name: sheet.item.name })}
           </p>
         )}
       </Dialog>
@@ -247,7 +247,7 @@ export function FolderBrowser({ mode }: { mode: 'play' | 'manage' }) {
       <Dialog
         open={sheet?.kind === 'mkdir'}
         onClose={() => setSheet(null)}
-        title={t('library.file-manager.new-folder')}
+        title={t('library.filemanager.newfolder')}
         actions={
           <>
             <button className="ui-btn" onClick={() => setSheet(null)}>{t('general.buttons.cancel')}</button>
@@ -265,8 +265,8 @@ export function FolderBrowser({ mode }: { mode: 'play' | 'manage' }) {
           className="ui-input"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder={t('library.manage.folder-name')}
-          aria-label={t('library.manage.folder-name')}
+          placeholder={t('library.manage.foldername')}
+          aria-label={t('library.manage.foldername')}
         />
       </Dialog>
     </div>

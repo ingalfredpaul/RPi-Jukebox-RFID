@@ -20,7 +20,7 @@ export function SpotifyPlaylists() {
   if (playlists.length === 0) {
     return (
       <div className={styles.empty}>
-        <p>{t('spotify.playlists.no-playlists')}</p>
+        <p>{t('spotify.playlists.noplaylists')}</p>
       </div>
     );
   }

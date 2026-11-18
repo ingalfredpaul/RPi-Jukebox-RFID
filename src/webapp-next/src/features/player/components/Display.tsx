@@ -11,7 +11,7 @@ export function Display() {
   const album = usePlayerStore((s) => s.status?.album ?? '');
   const state = usePlayerStore((s) => s.status?.state ?? 'stop');
 
-  const shownTitle = title || (file ? titleFromFile(file) : t('player.display.not-playing'));
+  const shownTitle = title || (file ? titleFromFile(file) : t('player.display.notplaying'));
   const sub = [artist, album].filter(Boolean).join(' · ');
 
   return (

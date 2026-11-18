@@ -18,43 +18,43 @@ export function PinSettings() {
 
   const save = () => {
     if (!setPin(next, hasPin ? current : undefined)) {
-      showToast('error', t('parent.wrong-pin'));
+      showToast('error', t('parent.wrongpin'));
       return;
     }
     setCurrent('');
     setNext('');
     setAgain('');
-    showToast('success', t('parent.pin-saved'));
+    showToast('success', t('parent.pinsaved'));
   };
 
   const remove = () => {
     if (!removePin(current)) {
-      showToast('error', t('parent.wrong-pin'));
+      showToast('error', t('parent.wrongpin'));
       return;
     }
     setCurrent('');
-    showToast('success', t('parent.pin-removed'));
+    showToast('success', t('parent.pinremoved'));
   };
 
   return (
     <section className="ui-card">
-      <div className="ui-card-title">{t('parent.pin-title')}</div>
+      <div className="ui-card-title">{t('parent.pintitle')}</div>
       <div className="ui-card-body">
         <div className={`ui-banner ${hasPin ? 'ui-banner-ok' : 'ui-banner-warn'}`}>
-          {hasPin ? t('parent.pin-active') : t('parent.pin-none')}
+          {hasPin ? t('parent.pinactive') : t('parent.pinnone')}
         </div>
         {hasPin && (
           <div className="ui-field">
-            <label className="ui-label" htmlFor="pin-current">{t('parent.pin-current')}</label>
+            <label className="ui-label" htmlFor="pin-current">{t('parent.pincurrent')}</label>
             <input id="pin-current" className="ui-input" type="password" inputMode="numeric" autoComplete="off" value={current} onChange={(e) => setCurrent(digits(e.target.value))} />
           </div>
         )}
         <div className="ui-field">
-          <label className="ui-label" htmlFor="pin-new">{hasPin ? t('parent.pin-new') : t('parent.pin-choose')}</label>
+          <label className="ui-label" htmlFor="pin-new">{hasPin ? t('parent.pinnew') : t('parent.pinchoose')}</label>
           <input id="pin-new" className="ui-input" type="password" inputMode="numeric" autoComplete="off" value={next} onChange={(e) => setNext(digits(e.target.value))} />
         </div>
         <div className="ui-field">
-          <label className="ui-label" htmlFor="pin-again">{t('parent.pin-repeat')}</label>
+          <label className="ui-label" htmlFor="pin-again">{t('parent.pinrepeat')}</label>
           <input id="pin-again" className="ui-input" type="password" inputMode="numeric" autoComplete="off" value={again} onChange={(e) => setAgain(digits(e.target.value))} />
         </div>
         <button className="ui-btn ui-btn-primary" disabled={!valid || (hasPin && current.length < 4)} onClick={save}>
@@ -62,10 +62,10 @@ export function PinSettings() {
         </button>
         {hasPin && (
           <button className="ui-btn ui-btn-danger" disabled={current.length < 4} onClick={remove}>
-            {t('parent.pin-remove')}
+            {t('parent.pinremove')}
           </button>
         )}
-        <p className="ui-hint">{t('parent.pin-disclaimer')}</p>
+        <p className="ui-hint">{t('parent.pindisclaimer')}</p>
       </div>
     </section>
   );

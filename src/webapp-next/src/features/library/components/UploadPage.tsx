@@ -79,7 +79,7 @@ export function UploadPage() {
         setFreeBytes(info.free_bytes);
         setServiceError(null);
       })
-      .catch((e: unknown) => setServiceError(e instanceof FileApiError ? e.message : t('upload.service-down')));
+      .catch((e: unknown) => setServiceError(e instanceof FileApiError ? e.message : t('upload.servicedown')));
   }, [setMaxBytes, t]);
 
   const active = items.some((i) => i.status === 'uploading' || i.status === 'queued');
@@ -95,7 +95,7 @@ export function UploadPage() {
   return (
     <div>
       <Header
-        title={t('library.file-manager.title')}
+        title={t('library.filemanager.title')}
         showBack
         backTo={`/library/manage/${dir.split('/').filter(Boolean).map(encodeURIComponent).join('/')}`}
       />
@@ -107,23 +107,23 @@ export function UploadPage() {
           <div className="ui-card-body">
             <p className="ui-wrap-anywhere"><strong>{target}</strong></p>
             <div className="ui-field">
-              <label className="ui-label" htmlFor="subfolder">{t('upload.new-folder-label')}</label>
+              <label className="ui-label" htmlFor="subfolder">{t('upload.newfolderlabel')}</label>
               <input
                 id="subfolder"
                 className="ui-input"
                 value={subFolder}
                 onChange={(e) => setSubFolder(e.target.value.replace(/[\\]/g, ''))}
-                placeholder={t('upload.new-folder-placeholder')}
+                placeholder={t('upload.newfolderplaceholder')}
                 disabled={active}
               />
-              <span className="ui-hint">{t('upload.new-folder-hint')}</span>
+              <span className="ui-hint">{t('upload.newfolderhint')}</span>
             </div>
             <div className={styles.pickRow}>
               <button className="ui-btn ui-btn-primary" onClick={() => filesInput.current?.click()}>
-                🎵 {t('upload.pick-files')}
+                🎵 {t('upload.pickfiles')}
               </button>
               <button className="ui-btn" onClick={() => folderInput.current?.click()}>
-                📁 {t('upload.pick-folder')}
+                📁 {t('upload.pickfolder')}
               </button>
             </div>
             <input
@@ -152,7 +152,7 @@ export function UploadPage() {
 
         {active && (
           <div className={`ui-banner ${wakeLock === 'active' ? 'ui-banner-ok' : 'ui-banner-warn'}`}>
-            {wakeLock === 'active' ? t('upload.screen-on') : t('upload.keep-open')}
+            {wakeLock === 'active' ? t('upload.screenon') : t('upload.keepopen')}
           </div>
         )}
 
@@ -166,9 +166,9 @@ export function UploadPage() {
                 <span style={{ width: `${Math.round(progress * 100)}%` }} />
               </div>
               <div className="ui-row ui-row-wrap">
-                {active && <button className="ui-btn ui-btn-danger" onClick={cancelAll}>{t('upload.cancel-all')}</button>}
+                {active && <button className="ui-btn ui-btn-danger" onClick={cancelAll}>{t('upload.cancelall')}</button>}
                 {failed > 0 && !active && (
-                  <button className="ui-btn ui-btn-primary" onClick={retryFailed}>{t('upload.retry-failed', { count: failed })}</button>
+                  <button className="ui-btn ui-btn-primary" onClick={retryFailed}>{t('upload.retryfailed', { count: failed })}</button>
                 )}
                 {!active && (
                   <button className="ui-btn" onClick={clearFinished}>{t('upload.clear')}</button>
@@ -184,7 +184,7 @@ export function UploadPage() {
             <strong>{t('upload.skipped', { count: skipped.length })}</strong>
             <ul style={{ margin: '8px 0', paddingLeft: 16, listStyle: 'disc' }}>
               {skipped.slice(0, 8).map((s, i) => (
-                <li key={i} className="ui-wrap-anywhere">{s.name} ({t(`upload.skip.${s.reason}`)})</li>
+                <li key={i} className="ui-wrap-anywhere">{s.name} ({t(`upload.skip.${s.reason.replace(/-/g, "")}`)})</li>
               ))}
               {skipped.length > 8 && <li>… {skipped.length - 8}</li>}
             </ul>
@@ -193,11 +193,11 @@ export function UploadPage() {
         )}
 
         <div className="ui-banner">
-          <strong>{t('upload.tips-title')}</strong>
+          <strong>{t('upload.tipstitle')}</strong>
           <ul style={{ margin: '8px 0 0', paddingLeft: 16, listStyle: 'disc' }}>
-            <li>{t('upload.tip-lock')}</li>
-            <li>{t('upload.tip-ios')}</li>
-            <li>{t('upload.tip-wifi')}</li>
+            <li>{t('upload.tiplock')}</li>
+            <li>{t('upload.tipios')}</li>
+            <li>{t('upload.tipwifi')}</li>
           </ul>
         </div>
       </div>

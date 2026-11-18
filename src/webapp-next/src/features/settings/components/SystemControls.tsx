@@ -13,7 +13,7 @@ export function SystemControls() {
     setDialog(null);
     if (!which) return;
     const { error } = await request(which);
-    showToast(error ? 'error' : 'info', error ? t('toast.settings-failed') : t(`settings.system.${which}-started`));
+    showToast(error ? 'error' : 'info', error ? t('toast.settingsfailed') : t(`settings.system.${which}started`));
   };
 
   return (
@@ -36,7 +36,7 @@ export function SystemControls() {
           </>
         }
       >
-        <p>{dialog === 'reboot' ? t('settings.system.reboot-confirm') : t('settings.system.shutdown-confirm')}</p>
+        <p>{dialog === 'reboot' ? t('settings.system.rebootconfirm') : t('settings.system.shutdownconfirm')}</p>
       </Dialog>
     </section>
   );

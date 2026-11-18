@@ -62,7 +62,7 @@ export function FileUpload({
       />
       <span className={styles.icon}>↑</span>
       <p className={styles.text}>
-        {isDragging ? t('general.drag-drop-active') : t('general.drag-drop')}
+        {isDragging ? t('general.dragdropactive') : t('general.dragdrop')}
       </p>
     </div>
   );

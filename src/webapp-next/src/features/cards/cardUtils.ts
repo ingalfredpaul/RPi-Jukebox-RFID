@@ -71,6 +71,6 @@ export function describeCard(entry: CardEntry, t: TFunction): { icon: string; te
   const folder = folderOfCard(entry);
   if (folder !== null) return { icon: '📁', text: t('cards.describe.folder', { folder }) };
   const special = matchSpecial(entry);
-  if (special) return { icon: special.icon, text: t(`cards.special.${special.key}`) };
+  if (special) return { icon: special.icon, text: t(`cards.special.${special.key.replace(/-/g, "")}`) };
   return { icon: '⚙', text: entry.func || entry.from_alias || '–' };
 }

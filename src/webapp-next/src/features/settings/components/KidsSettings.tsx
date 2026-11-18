@@ -55,7 +55,7 @@ export function KidsSettings() {
     if (localMax === null) return;
     const ok = await setSoftMax(localMax);
     setLocalMax(null);
-    showToast(ok ? 'success' : 'error', ok ? t('toast.settings-saved') : t('toast.settings-failed'));
+    showToast(ok ? 'success' : 'error', ok ? t('toast.settingssaved') : t('toast.settingsfailed'));
   };
 
   const changeIdle = async (minutes: number) => {
@@ -64,21 +64,21 @@ export function KidsSettings() {
         ? await request('timer_idle_shutdown.cancel')
         : await request('timer_idle_shutdown', { wait_seconds: minutes * 60 });
     if (error) {
-      showToast('error', t('toast.settings-failed'));
+      showToast('error', t('toast.settingsfailed'));
       return;
     }
     setIdleMin(minutes);
-    showToast('success', t('toast.settings-saved'));
+    showToast('success', t('toast.settingssaved'));
   };
 
   const toggleResumeDefault = async (enabled: boolean) => {
     const { error } = await request('kidsbox_set_resume_default', { enabled });
     if (error) {
-      showToast('error', t('toast.settings-failed'));
+      showToast('error', t('toast.settingsfailed'));
       return;
     }
     setKids((k) => (k ? { ...k, resume_default: enabled } : k));
-    showToast('success', t('toast.settings-saved'));
+    showToast('success', t('toast.settingssaved'));
   };
 
   return (
@@ -87,7 +87,7 @@ export function KidsSettings() {
       <div className="ui-card-body">
         <div className="ui-field">
           <div className="ui-row">
-            <label className="ui-label ui-grow" htmlFor="max-volume">{t('kids.max-volume')}</label>
+            <label className="ui-label ui-grow" htmlFor="max-volume">{t('kids.maxvolume')}</label>
             <strong>{maxShown}%</strong>
           </div>
           <input
@@ -101,18 +101,18 @@ export function KidsSettings() {
             onPointerUp={() => void commitMax()}
             onKeyUp={() => void commitMax()}
           />
-          <span className="ui-hint">{t('kids.max-volume-hint')}</span>
-          {maxShown > 80 && <div className="ui-banner ui-banner-warn">{t('kids.max-volume-warn')}</div>}
+          <span className="ui-hint">{t('kids.maxvolumehint')}</span>
+          {maxShown > 80 && <div className="ui-banner ui-banner-warn">{t('kids.maxvolumewarn')}</div>}
         </div>
 
         <div className="ui-field">
-          <label className="ui-label" htmlFor="jump">{t('kids.volume-jump')}</label>
+          <label className="ui-label" htmlFor="jump">{t('kids.volumejump')}</label>
           <select id="jump" className="ui-select" value={maxJump} onChange={(e) => updatePrefs({ maxVolumeJump: Number(e.target.value) })}>
             {JUMP_CHOICES.map((v) => (
               <option key={v} value={v}>{v === 0 ? t('kids.unlimited') : t('kids.points', { count: v })}</option>
             ))}
           </select>
-          <span className="ui-hint">{t('kids.volume-jump-hint')}</span>
+          <span className="ui-hint">{t('kids.volumejumphint')}</span>
         </div>
 
         <div className="ui-field">
@@ -122,7 +122,7 @@ export function KidsSettings() {
               <option key={v} value={v}>{v === 0 ? t('kids.off') : t('kids.minutes', { count: v })}</option>
             ))}
           </select>
-          <span className="ui-hint">{t('kids.idle-hint')}</span>
+          <span className="ui-hint">{t('kids.idlehint')}</span>
         </div>
 
         {kidsbox ? (
@@ -135,24 +135,24 @@ export function KidsSettings() {
                 onChange={(e) => void toggleResumeDefault(e.target.checked)}
               />
               <span>
-                {t('kids.resume-default')}
-                <span className="ui-hint" style={{ display: 'block' }}>{t('kids.resume-default-hint')}</span>
+                {t('kids.resumedefault')}
+                <span className="ui-hint" style={{ display: 'block' }}>{t('kids.resumedefaulthint')}</span>
               </span>
             </label>
             {kids && (
               <div className="ui-banner">
-                <strong>{t('kids.rules-title')}</strong>
+                <strong>{t('kids.rulestitle')}</strong>
                 <ul style={{ margin: '8px 0 0', paddingLeft: 16, listStyle: 'disc' }}>
-                  <li>{t('kids.rule-same-card')}</li>
-                  <li>{kids.fade_ms > 0 ? t('kids.rule-fade', { ms: kids.fade_ms }) : t('kids.rule-nofade')}</li>
-                  <li>{kids.unknown_card_sound ? t('kids.rule-unknown-sound') : t('kids.rule-unknown-silent')}</li>
+                  <li>{t('kids.rulesamecard')}</li>
+                  <li>{kids.fade_ms > 0 ? t('kids.rulefade', { ms: kids.fade_ms }) : t('kids.rulenofade')}</li>
+                  <li>{kids.unknown_card_sound ? t('kids.ruleunknownsound') : t('kids.ruleunknownsilent')}</li>
                 </ul>
-                <p className="ui-hint" style={{ marginTop: 8 }}>{t('kids.rules-config')}</p>
+                <p className="ui-hint" style={{ marginTop: 8 }}>{t('kids.rulesconfig')}</p>
               </div>
             )}
           </>
         ) : (
-          <div className="ui-banner ui-banner-warn">{t('kids.no-plugin')}</div>
+          <div className="ui-banner ui-banner-warn">{t('kids.noplugin')}</div>
         )}
       </div>
     </section>

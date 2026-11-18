@@ -28,9 +28,9 @@ export function SystemStatus() {
 
   const rows: [string, string][] = [
     [t('settings.status.version'), coreVersion || '–'],
-    [t('settings.status.cpu-temp'), cpuTemp !== null ? `${cpuTemp.toFixed(1)} °C` : '–'],
-    [t('settings.status.ip-address'), ipAddress],
-    [t('settings.status.disk-usage'), disk ? t('settings.status.disk-free', { free: gb(disk.free), total: gb(disk.total) }) : '–'],
+    [t('settings.status.cputemp'), cpuTemp !== null ? `${cpuTemp.toFixed(1)} °C` : '–'],
+    [t('settings.status.ipaddress'), ipAddress],
+    [t('settings.status.diskusage'), disk ? t('settings.status.diskfree', { free: gb(disk.free), total: gb(disk.total) }) : '–'],
   ];
   if (batteryStatus) rows.push([t('settings.status.battery'), `${batteryStatus.level}%${batteryStatus.charging ? ' ⚡' : ''}`]);
 

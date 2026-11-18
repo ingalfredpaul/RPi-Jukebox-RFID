@@ -31,7 +31,7 @@ export function AlbumList() {
     return (
       <div className={styles.empty}>
         <span className={styles.emptyIcon}>📡</span>
-        <p>{t('general.loading-error')}</p>
+        <p>{t('general.loadingerror')}</p>
         <button className="ui-btn" onClick={refetch}>{t('general.buttons.retry')}</button>
       </div>
     );
@@ -52,7 +52,7 @@ export function AlbumList() {
       {filtered.length === 0 ? (
         <div className={styles.empty}>
           <span className={styles.emptyIcon}>📀</span>
-          <p>{search ? t('library.search.no-results') : t('library.albums.no-albums')}</p>
+          <p>{search ? t('library.search.noresults') : t('library.albums.noalbums')}</p>
           {!search && <p className="ui-hint">{t('library.albums.hint')}</p>}
         </div>
       ) : (

@@ -46,8 +46,8 @@ export function ParentGate({ children }: { children: ReactNode }) {
   return (
     <form className="ui-page" onSubmit={submit} style={{ alignItems: 'stretch', paddingTop: '15vh' }}>
       <div style={{ textAlign: 'center', fontSize: '3rem' }} aria-hidden="true">🔒</div>
-      <h1 style={{ textAlign: 'center', fontSize: 'var(--font-size-xl)' }}>{t('parent.locked-title')}</h1>
-      <p className="ui-hint" style={{ textAlign: 'center' }}>{t('parent.locked-text')}</p>
+      <h1 style={{ textAlign: 'center', fontSize: 'var(--font-size-xl)' }}>{t('parent.lockedtitle')}</h1>
+      <p className="ui-hint" style={{ textAlign: 'center' }}>{t('parent.lockedtext')}</p>
       <input
         className="ui-input"
         type="password"
@@ -61,8 +61,8 @@ export function ParentGate({ children }: { children: ReactNode }) {
         style={{ textAlign: 'center', letterSpacing: '0.4em', fontSize: '1.4rem' }}
         disabled={lockedOut}
       />
-      {wrong && !lockedOut && <div className="ui-banner ui-banner-error">{t('parent.wrong-pin')}</div>}
-      {lockedOut && <div className="ui-banner ui-banner-warn">{t('parent.too-many')}</div>}
+      {wrong && !lockedOut && <div className="ui-banner ui-banner-error">{t('parent.wrongpin')}</div>}
+      {lockedOut && <div className="ui-banner ui-banner-warn">{t('parent.toomany')}</div>}
       <button className="ui-btn ui-btn-primary ui-btn-block" type="submit" disabled={pin.length < 4 || lockedOut}>
         {t('parent.unlock')}
       </button>

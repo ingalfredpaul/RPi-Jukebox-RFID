@@ -19,7 +19,7 @@ export function StationList() {
     addStation({ name: name.trim(), url: url.trim() });
     setName('');
     setUrl('');
-    showToast('success', t('toast.settings-saved'));
+    showToast('success', t('toast.settingssaved'));
   };
 
   return (
@@ -53,7 +53,7 @@ export function StationList() {
       {stations.length === 0 ? (
         <div className={styles.empty}>
           <span className={styles.emptyIcon}>📻</span>
-          <p>{t('radio.stations.no-stations')}</p>
+          <p>{t('radio.stations.nostations')}</p>
         </div>
       ) : (
         <div className={styles.list}>

@@ -21,7 +21,7 @@ function Content() {
         title={t('settings.title')}
         actions={
           hasPin && isParent ? (
-            <button className="ui-btn" onClick={lock}>🔒 {t('parent.lock-now')}</button>
+            <button className="ui-btn" onClick={lock}>🔒 {t('parent.locknow')}</button>
           ) : undefined
         }
       />
