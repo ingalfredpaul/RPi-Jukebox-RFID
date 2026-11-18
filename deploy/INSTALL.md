@@ -37,14 +37,20 @@ sudo cp /etc/nginx/sites-available/default ~/backup-vor-umbau/nginx-default   # 
 cp src/jukebox/components/rpc_command_alias.py ~/backup-vor-umbau/
 cp ~/phoniebox-update/rpc_command_alias.py src/jukebox/components/rpc_command_alias.py
 
+# WICHTIG: Den Daemon ZUERST stoppen. Läuft er beim Schreiben noch, schreibt er beim Beenden
+# seinen alten Stand zurück in jukebox.yaml und überschreibt die neuen Werte.
+systemctl --user stop jukebox-daemon
 .venv/bin/python deploy/kids-config/apply-kids-config.py --dry-run   # zeigt die Änderungen
 .venv/bin/python deploy/kids-config/apply-kids-config.py             # schreibt (mit Backup *.bak-DATUM)
-systemctl --user restart jukebox-daemon
-sleep 20; journalctl --user -u jukebox-daemon -n 40 --no-pager | grep -i "kids\|error"
+grep -nE "kidsbox|startup_volume|soft_max_volume" shared/settings/jukebox.yaml   # muss die neuen Werte zeigen
+systemctl --user start jukebox-daemon
+sleep 25; sudo journalctl _SYSTEMD_USER_UNIT=jukebox-daemon.service -n 80 --no-pager | grep -i "kids\|error"
 ```
 
 Erwartet wird eine Zeile `Kids mode ready`. Standardwerte: Startlautstärke 25 %, Höchstlautstärke 60 %,
-Ausschalten nach 15 Min. Stille, `same_id_delay` 2 s. Ändern mit `--max-volume 50 --startup-volume 20 --idle-minutes 10`.
+`same_id_delay` 2 s (Future3-Standard wäre 1 s), automatisches Ausschalten **aus**.
+Ändern mit `--max-volume 50 --startup-volume 20`. Das Ausschalten nach Stille schaltest du mit `--idle-minutes 15` ein.
+Achtung: Der Zero 2 W fährt dann komplett herunter und hat keinen Einschaltknopf, du musst den Strom trennen.
 Wenn das Plugin nicht lädt: `journalctl` zeigt den Fehler; Rückweg siehe Schritt 6, Abschnitt Plugin.
 
 ## 4. Upload-Dienst einrichten
@@ -97,4 +103,6 @@ das Symbol und der Vollbildstart funktionieren trotzdem (iOS Safari, Android Chr
 5. Dieselbe Karte nochmal auflegen: Musik läuft weiter (nicht von vorn).
 6. Unbekannte Karte: Signalton an der Box, Hinweis am Handy.
 
-Nicht von mir auf einer echten Box ausprobiert (nur lokal getestet): alles ab Schritt 3. Siehe `docs/kinder-verhalten.md`, Abschnitt "Grenzen".
+Auf einer echten Box (Zero 2 W, Debian 13) eingespielt und geprüft: Schritte 1 bis 5, Upload, Karten-Logik mit Testordnern,
+Lautstärkegrenze, Proxy. Nicht geprüft ohne Kartenleser: unbekannte Karte (Signalton), Entprellung am echten Leser,
+Hörbuch-Ende. Siehe `docs/kinder-verhalten.md`, Abschnitt "Grenzen".

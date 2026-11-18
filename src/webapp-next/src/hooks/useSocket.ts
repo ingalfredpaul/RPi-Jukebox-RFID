@@ -6,6 +6,11 @@ import { useConnectionStore } from '../stores/connectionStore';
 import { useSettingsStore } from '../stores/settingsStore';
 import { normalizeStatus } from '../utils/mpd';
 
+/** True only when the connection just came back (not on every message while connected). */
+export function shouldReloadSettings(wasConnected: boolean, connected: boolean): boolean {
+  return connected && !wasConnected;
+}
+
 /** The daemon publishes the player status several times per second. */
 const STALE_AFTER_MS = 8000;
 const WATCHDOG_INTERVAL_MS = 2000;
@@ -32,9 +37,14 @@ export function useSocketInit(): void {
       }
     });
 
+    // The socket reports "connected" for EVERY PubSub message (several per second). Only a real
+    // change of the connection state (compare with the store, the watchdog sets it from outside)
+    // may reload the settings, otherwise every open tab hammers the box with RPC calls.
     socket.setConnectionChangeHandler((connected) => {
-      useConnectionStore.getState().setState(connected ? 'connected' : 'reconnecting');
-      if (connected) void useSettingsStore.getState().loadSettings();
+      const store = useConnectionStore.getState();
+      const wasConnected = store.state === 'connected';
+      store.setState(connected ? 'connected' : 'reconnecting');
+      if (shouldReloadSettings(wasConnected, connected)) void useSettingsStore.getState().loadSettings();
     });
 
     let lastReconnect = Date.now();

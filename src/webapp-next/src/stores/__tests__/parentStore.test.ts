@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { useParentStore, hashPin } from '../parentStore';
 import { limitJump } from '../prefsStore';
 
@@ -47,5 +47,43 @@ describe('volume jump limit', () => {
     expect(limitJump(50, 0, 15)).toBe(35);
     expect(limitJump(20, 25, 15)).toBe(25);
     expect(limitJump(20, 80, 0)).toBe(80);
+  });
+});
+
+describe('parent lockout survives a page reload', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    sessionStorage.clear();
+    vi.resetModules();
+  });
+  afterEach(() => vi.useRealTimers());
+
+  it('stays locked after reload, opens again after 30 s', async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-11-18T12:00:00Z'));
+    let mod = await import('../parentStore');
+    mod.useParentStore.getState().setPin('1234');
+    mod.useParentStore.getState().lock();
+    for (let i = 0; i < 3; i++) mod.useParentStore.getState().unlock('9999');
+
+    // "reload": fresh module instance, only localStorage is left
+    vi.resetModules();
+    mod = await import('../parentStore');
+    expect(mod.useParentStore.getState().unlock('1234')).toBe(false); // still locked out
+    vi.setSystemTime(new Date('2026-11-18T12:00:31Z'));
+    expect(mod.useParentStore.getState().unlock('1234')).toBe(true);
+  });
+
+  it('counts wrong tries across reloads and clears the counter on success', async () => {
+    let mod = await import('../parentStore');
+    mod.useParentStore.getState().setPin('1234');
+    mod.useParentStore.getState().lock();
+    mod.useParentStore.getState().unlock('0000');
+    mod.useParentStore.getState().unlock('0000');
+    vi.resetModules();
+    mod = await import('../parentStore');
+    expect(mod.useParentStore.getState().failedTries).toBe(2);
+    expect(mod.useParentStore.getState().unlock('1234')).toBe(true);
+    expect(localStorage.getItem('pb.parent.lock')).toBeNull();
   });
 });

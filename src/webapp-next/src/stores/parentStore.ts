@@ -17,6 +17,7 @@ import { create } from 'zustand';
 const STORAGE_KEY = 'pb.parent';
 const SESSION_KEY = 'pb.parent.until';
 export const AUTO_LOCK_MS = 10 * 60 * 1000;
+const LOCK_KEY = 'pb.parent.lock';
 const MAX_TRIES = 3;
 const LOCKOUT_MS = 30_000;
 
@@ -57,6 +58,26 @@ function loadUnlockedUntil(): number {
   }
 }
 
+/** Failed tries and lockout survive a page reload (still only child protection: clearing site data resets it). */
+function loadLock(): { failedTries: number; lockedOutUntil: number } {
+  try {
+    const raw = window.localStorage.getItem(LOCK_KEY);
+    const v = raw ? (JSON.parse(raw) as { failedTries?: number; lockedOutUntil?: number }) : {};
+    return { failedTries: Number(v.failedTries) || 0, lockedOutUntil: Number(v.lockedOutUntil) || 0 };
+  } catch {
+    return { failedTries: 0, lockedOutUntil: 0 };
+  }
+}
+
+function persistLock(failedTries: number, lockedOutUntil: number) {
+  try {
+    if (failedTries === 0 && lockedOutUntil === 0) window.localStorage.removeItem(LOCK_KEY);
+    else window.localStorage.setItem(LOCK_KEY, JSON.stringify({ failedTries, lockedOutUntil }));
+  } catch {
+    /* ignore */
+  }
+}
+
 function persistUntil(ts: number) {
   try {
     window.sessionStorage.setItem(SESSION_KEY, String(ts));
@@ -83,8 +104,7 @@ interface ParentState {
 export const useParentStore = create<ParentState>((set, get) => ({
   stored: load(),
   unlockedUntil: loadUnlockedUntil(),
-  failedTries: 0,
-  lockedOutUntil: 0,
+  ...loadLock(),
 
   hasPin: () => get().stored !== null,
 
@@ -97,15 +117,16 @@ export const useParentStore = create<ParentState>((set, get) => ({
     if (hashPin(pin, stored.salt) === stored.hash) {
       const until = Date.now() + AUTO_LOCK_MS;
       persistUntil(until);
+      persistLock(0, 0);
       set({ unlockedUntil: until, failedTries: 0, lockedOutUntil: 0 });
       return true;
     }
     const tries = failedTries + 1;
-    set(
-      tries >= MAX_TRIES
-        ? { failedTries: 0, lockedOutUntil: Date.now() + LOCKOUT_MS }
-        : { failedTries: tries },
-    );
+    const next = tries >= MAX_TRIES
+      ? { failedTries: 0, lockedOutUntil: Date.now() + LOCKOUT_MS }
+      : { failedTries: tries, lockedOutUntil };
+    persistLock(next.failedTries, next.lockedOutUntil);
+    set(next);
     return false;
   },
 

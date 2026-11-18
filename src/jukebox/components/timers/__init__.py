@@ -56,6 +56,7 @@ def finalize():
     plugin.register(timer_stop_player, name='timer_stop_player', package=plugin.loaded_as(__name__))
 
     # Volume Fadeout and Shutdown Timer
+    global timer_fade_volume
     timer_fade_volume = VolumeFadoutAndShutdown(
         name=f"{plugin.loaded_as(__name__)}.timer_fade_volume"
     )
@@ -85,21 +86,16 @@ def finalize():
 
 @plugin.atexit
 def atexit(**ignored_kwargs):
-    global timer_shutdown
-    timer_shutdown.cancel()
-    global timer_stop_player
-    timer_stop_player.cancel()
-    global timer_fade_volume
-    timer_fade_volume.cancel()
-    global timer_idle_shutdown
-    timer_idle_shutdown.cancel()
-    global timer_idle_check
-    timer_idle_check.cancel()
-    ret = [
-        timer_shutdown.timer_thread,
-        timer_stop_player.timer_thread,
-        timer_fade_volume.timer_thread,
-        timer_idle_shutdown.timer_thread,
-        timer_idle_check.timer_thread
+    # Cancel the timer objects themselves. Do NOT call timer_idle_shutdown.cancel() here: that is the
+    # user-facing "disable idle shutdown" command and would write timeout_sec=0 into jukebox.yaml,
+    # i.e. switch the feature off permanently on every daemon stop. Its two private timers are enough.
+    timers = [
+        timer_shutdown,
+        timer_stop_player,
+        timer_fade_volume,
+        timer_idle_shutdown.private_timer_idle_check,
+        timer_idle_shutdown.private_timer_idle_shutdown,
     ]
-    return ret
+    for t in timers:
+        t.cancel()
+    return [t.timer_thread for t in timers if t.timer_thread is not None]

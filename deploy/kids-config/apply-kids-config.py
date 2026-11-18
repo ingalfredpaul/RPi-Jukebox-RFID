@@ -16,7 +16,7 @@ What it changes (all values can be overridden, see --help):
     kidsbox.*                     defaults of the plugin (fade, resume, unknown-card signal)
     pulse.startup_volume          volume after every start      (default 25)
     pulse.soft_max_volume         hearing protection limit      (default 60)
-    timers.idle_shutdown.timeout_sec   switch off when idle     (default 15 min)
+    timers.idle_shutdown.timeout_sec   switch off when idle     (default 0 = off; the Zero has no power button)
     playermpd.second_swipe_action.alias   "play": same card again never restarts the music
                                           (only used by the old play_card/play_folder cards;
                                           kidsbox cards handle this themselves)
@@ -145,7 +145,7 @@ def main():
     parser.add_argument('--dry-run', action='store_true', help='only show what would change')
     parser.add_argument('--max-volume', type=int, default=60, help='soft maximum volume in percent (default 60)')
     parser.add_argument('--startup-volume', type=int, default=25, help='volume after start in percent (default 25)')
-    parser.add_argument('--idle-minutes', type=int, default=15, help='switch off after N idle minutes, 0 = never (default 15)')
+    parser.add_argument('--idle-minutes', type=int, default=0, help='switch off after N idle minutes, 0 = never (default 0; a switched-off Zero needs a power cycle)')
     parser.add_argument('--same-id-delay', type=float, default=2.0, help='seconds before the same card triggers again (default 2.0)')
     args = parser.parse_args()
     if args.idle_minutes != 0 and args.idle_minutes < 1:
