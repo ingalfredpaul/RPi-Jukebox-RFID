@@ -89,13 +89,13 @@ export function FolderBrowser({ mode }: { mode: 'play' | 'manage' }) {
       )}
 
       <nav className={styles.crumbs} aria-label={t('library.folders.path')}>
-        <button className="ui-ellipsis" onClick={() => go('')} style={{ color: 'var(--color-accent-light)' }}>
+        <button className={styles.crumb} onClick={() => go('')}>
           {t('library.folders.root')}
         </button>
         {crumbs.map((c, i) => (
           <span key={i}>
             {' / '}
-            <button onClick={() => go(crumbs.slice(0, i + 1).join('/'))} style={{ color: 'var(--color-accent-light)' }}>
+            <button className={styles.crumb} onClick={() => go(crumbs.slice(0, i + 1).join('/'))}>
               {c}
             </button>
           </span>

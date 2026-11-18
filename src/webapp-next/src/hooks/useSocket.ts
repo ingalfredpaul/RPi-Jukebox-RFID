@@ -22,6 +22,7 @@ export function useSocketInit(): void {
     const socket = getSocket();
     const connection = useConnectionStore.getState();
     connection.setState('connecting');
+    usePubSubStore.getState().markConnecting();
 
     const unsubscribe = socket.onPubSub((topic, data) => {
       if (topic === 'playerstatus') {
@@ -44,6 +45,7 @@ export function useSocketInit(): void {
         useConnectionStore.getState().setState(socket.lastMessageAt ? 'reconnecting' : 'disconnected');
         if (silent > STALE_AFTER_MS * 2) {
           lastReconnect = now;
+          usePubSubStore.getState().markConnecting();
           socket.reconnectAll();
         }
       }
@@ -52,6 +54,7 @@ export function useSocketInit(): void {
     const onVisible = () => {
       if (document.visibilityState === 'visible' && Date.now() - socket.lastMessageAt > 3000) {
         lastReconnect = Date.now();
+        usePubSubStore.getState().markConnecting();
         socket.reconnectAll();
       }
     };

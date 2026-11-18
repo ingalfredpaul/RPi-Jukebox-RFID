@@ -228,3 +228,19 @@
   font-size: var(--font-size-sm);
   flex: none;
 }
+
+.crumb {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch-min);
+  padding: 0 var(--space-xs);
+  color: var(--color-accent-light);
+}
+
+.pickRow :global(.ui-btn) {
+  flex-direction: column;
+  gap: 2px;
+  min-height: 64px;
+  padding: var(--space-sm);
+  line-height: 1.2;
+}

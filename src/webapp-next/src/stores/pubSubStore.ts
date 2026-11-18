@@ -16,6 +16,13 @@ interface PubSubState {
   coreVersion: string | null;
   startedAt: string | null;
   pluginsLoaded: Record<string, boolean>;
+  /**
+   * The daemon re-sends the last value of every topic to a new subscriber, so right after
+   * connecting we get the card that was scanned minutes ago. Such replays must not look like
+   * a fresh scan (no "unknown card" banner when just opening the page).
+   */
+  ignoreScansUntil: number;
+  markConnecting: () => void;
 
   setVolume: (volume: Volume) => void;
   setBatteryStatus: (status: BatteryStatus) => void;
@@ -26,6 +33,8 @@ interface PubSubState {
   setPluginsLoaded: (plugins: Record<string, boolean>) => void;
   handleEvent: (topic: string, data: unknown) => void;
 }
+
+const REPLAY_WINDOW_MS = 2500;
 
 /** `core.plugins.loaded` is a list of package names; keep a lookup map. */
 function toPluginMap(data: unknown): Record<string, boolean> {
@@ -45,6 +54,8 @@ export const usePubSubStore = create<PubSubState>((set) => ({
   coreVersion: null,
   startedAt: null,
   pluginsLoaded: {},
+  ignoreScansUntil: 0,
+  markConnecting: () => set({ ignoreScansUntil: Date.now() + REPLAY_WINDOW_MS }),
 
   setVolume: (volume) => set({ volume }),
   setBatteryStatus: (status) => set({ batteryStatus: status }),
@@ -72,7 +83,11 @@ export const usePubSubStore = create<PubSubState>((set) => ({
         break;
       }
       case 'rfid.card_id':
-        set({ rfidCardId: String(data), lastScan: { id: String(data), at: Date.now() } });
+        set((state) =>
+          Date.now() < state.ignoreScansUntil
+            ? { rfidCardId: String(data) }
+            : { rfidCardId: String(data), lastScan: { id: String(data), at: Date.now() } },
+        );
         break;
       case 'core.version':
         set({ coreVersion: String(data) });

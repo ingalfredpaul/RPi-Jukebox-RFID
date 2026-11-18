@@ -163,7 +163,12 @@
 .volume {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
+  gap: var(--space-xs);
+}
+
+.volume .btn {
+  width: 48px;
+  height: 48px;
 }
 
 .volWrap {
@@ -239,6 +244,21 @@
   text-align: center;
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
+}
+
+@media (max-width: 359px) {
+  .content {
+    padding-left: var(--space-md);
+    padding-right: var(--space-md);
+  }
+  .controls .btn {
+    width: 44px;
+    height: 44px;
+  }
+  .controls .playPause {
+    width: 64px;
+    height: 64px;
+  }
 }
 
 @media (max-height: 640px) {
