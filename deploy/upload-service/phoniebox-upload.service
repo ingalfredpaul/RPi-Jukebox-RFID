@@ -1,0 +1,23 @@
+# systemd USER unit for the Phoniebox upload service.
+# Install to ~/.config/systemd/user/ (see README.md / deploy/INSTALL.md).
+# Check that user services start at boot like jukebox-daemon does:
+#   loginctl show-user admin | grep Linger
+# (If jukebox-daemon already starts at boot, this unit does too.)
+[Unit]
+Description=Phoniebox upload service
+After=network.target
+
+[Service]
+Type=simple
+EnvironmentFile=-%h/phoniebox-upload/upload-service.conf
+ExecStart=/usr/bin/python3 %h/phoniebox-upload/phoniebox_upload.py
+Restart=on-failure
+RestartSec=3
+# Pi Zero 2 W has 415 MB RAM; MemoryMax only works if cgroup memory
+# delegation is available for user units (harmless otherwise).
+MemoryMax=64M
+NoNewPrivileges=true
+UMask=0002
+
+[Install]
+WantedBy=default.target

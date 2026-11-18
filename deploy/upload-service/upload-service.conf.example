@@ -1,0 +1,12 @@
+# Copy to ~/phoniebox-upload/upload-service.conf (KEY=VALUE, no export, no ~ needed in systemd,
+# the service expands ~ itself when started without systemd; with systemd use absolute paths).
+PHONIEBOX_UPLOAD_ROOT=/home/admin/RPi-Jukebox-RFID/shared/audiofolders
+# Only reachable from the box itself; nginx forwards /upload and /files/ here.
+PHONIEBOX_UPLOAD_HOST=127.0.0.1
+PHONIEBOX_UPLOAD_PORT=8081
+# Max size per file in bytes (default 1 GiB)
+PHONIEBOX_UPLOAD_MAX_BYTES=1073741824
+PHONIEBOX_UPLOAD_MPD_HOST=localhost
+PHONIEBOX_UPLOAD_MPD_PORT=6600
+# Parallel uploads (RAM is tight)
+PHONIEBOX_UPLOAD_MAX_UPLOADS=4
