@@ -9,6 +9,7 @@ import { usePubSubStore } from '../../../stores/pubSubStore';
 import { SPECIAL_ACTIONS, describeCard, folderOfCard, matchSpecial } from '../cardUtils';
 import { useCards } from '../useCards';
 import { FolderPicker } from './FolderPicker';
+import { LinkImport } from './LinkImport';
 import styles from '../cards.module.css';
 
 interface KidsConfig {
@@ -185,6 +186,7 @@ export function CardWizard() {
             {kind === 'folder' ? (
               <>
                 <FolderPicker value={folder} onChange={setFolder} />
+                <LinkImport onDone={setFolder} />
                 {kidsbox ? (
                   <label className="ui-switch">
                     <input type="checkbox" checked={resume} onChange={(e) => setResume(e.target.checked)} />

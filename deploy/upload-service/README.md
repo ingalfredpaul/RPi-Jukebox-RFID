@@ -13,7 +13,8 @@ unterhalb von `~/RPi-Jukebox-RFID/shared/audiofolders`. Wird von der neuen Web-A
 ## Konfiguration
 Umgebungsvariablen (oder Datei, `--config` bzw. `PHONIEBOX_UPLOAD_CONF`; Umgebung gewinnt):
 `PHONIEBOX_UPLOAD_ROOT`, `_HOST` (127.0.0.1), `_PORT` (8081), `_MAX_BYTES` (1 GiB pro Datei),
-`_MPD_HOST` (localhost), `_MPD_PORT` (6600), `_MAX_UPLOADS` (4 gleichzeitige Uploads, mehr -> HTTP 429).
+`_MPD_HOST` (localhost), `_MPD_PORT` (6600), `_MAX_UPLOADS` (4 gleichzeitige Uploads, mehr -> HTTP 429),
+`_YTDLP` (Programm fuer "Von Link laden", Standard `yt-dlp` im PATH), `_IMPORT_TIMEOUT` (3600 s pro Download).
 
 ## API
 Antworten sind JSON. Fehler: `{"ok":false,"error":"code","message":"Text"}`.
@@ -28,6 +29,8 @@ Alle POSTs brauchen den Header `X-Requested-With: phoniebox` (sonst 403).
 | `POST /files/rename` `{path,to}` | umbenennen/verschieben; Ziel existiert -> 409 |
 | `GET /files/info` | `{max_bytes, allowed_extensions, free_bytes}` |
 | `GET /files/health` | `{ok:true}` |
+| `POST /files/import` `{url, folder?}` | Link (http/https) im Hintergrund mit `yt-dlp` laden und als MP3 speichern. Ohne `folder` neuer Ordner mit dem Titel als Name. 202 `{id,state:"running",...}`. Nur ein Download gleichzeitig (sonst 429), ohne `yt-dlp` 501. |
+| `GET /files/import/status?id=<id>` | `{state: running/done/error, folder, file, message}` |
 
 Statuscodes: 400 (ungueltiger Pfad, Symlink, kaputter Body), 403 (Header fehlt), 404, 409, 411, 413 (zu gross),
 415 (Dateityp), 429 (zu viele Uploads), 507 (Karte voll).
@@ -42,12 +45,20 @@ Statuscodes: 400 (ungueltiger Pfad, Symlink, kaputter Body), 403 (Header fehlt),
 - Fuer neu hochgeladene Dateien hat die Box nach dem MPD-Update die Titel in der Datenbank; die Web-App
   muss die Liste danach neu laden.
 
+## Von Link laden (yt-dlp)
+- Braucht `yt-dlp` und `ffmpeg` auf der Box. Fehlt `yt-dlp`, blendet die Web-App das Feld aus (`/files/info` -> `import_available`).
+- `yt-dlp` aktuell halten (Debian-Paket veraltet schnell, YouTube aendert oft etwas). Fuer YouTube braucht `yt-dlp` zusaetzlich eine JavaScript-Laufzeit (z. B. `deno`).
+- Ablauf: Download in versteckten Ordner `.import-xxxx` unter der Wurzel, Umwandlung in MP3 (VBR ~130 kBit/s), dann Verschieben in den Zielordner
+  (vorhandene Datei wird nie ueberschrieben, sondern `Name (2).mp3`), MPD-Update. Playlists werden nicht geladen (`--no-playlist`).
+- Rechtliches: Nur Inhalte laden, die man laden darf (eigene Videos, freie Lizenzen, gemeinfreie Werke).
+
 ## Sicherheitsmodell (bitte lesen)
 **Es gibt keine Anmeldung und kein HTTPS.** Geschuetzt ist:
 Pfad-Traversal (`..`, absolute Pfade, Backslash, NUL, versteckte Namen), Ausbrechen ueber Symlinks (werden weder
 gefolgt noch erzeugt noch aufgelistet), Dateityp-Whitelist, Groessenlimit, Parallelitaetsgrenze, Socket-Timeout 60 s,
 einfacher CSRF-Schutz (Pflicht-Header; Browser senden ihn fremden Seiten nicht ohne CORS-Freigabe, und es gibt keine).
-**Nicht** geschuetzt: Jeder im Heimnetz, der Port 80 der Box erreicht, kann Musik hochladen und loeschen.
+**Nicht** geschuetzt: Jeder im Heimnetz, der Port 80 der Box erreicht, kann Musik hochladen und loeschen
+und die Box beliebige http(s)-Links abrufen lassen.
 Den Dienst deshalb nur an `127.0.0.1` binden (Standard) und nie ins Internet freigeben. Die "PIN" der Web-App ist
 nur eine Kindersicherung in der Oberflaeche und schuetzt diese API nicht.
 
