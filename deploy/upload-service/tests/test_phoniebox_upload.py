@@ -402,3 +402,107 @@ def test_config(tmp_path):
     conf.write_text("# c\nPHONIEBOX_UPLOAD_PORT=9000\nPHONIEBOX_UPLOAD_ROOT=/srv/a\n")
     cfg = pu.load_config({"PHONIEBOX_UPLOAD_PORT": "9001"}, str(conf))
     assert cfg["port"] == 9001 and cfg["root"] == "/srv/a" and cfg["host"] == "127.0.0.1"
+
+
+# ---------------------------------------------------------------- import from link
+FAKE_YTDLP = r'''#!/usr/bin/env python3
+import os, sys, time
+args = sys.argv[1:]
+out = args[args.index("-o") + 1]
+url = args[args.index("--") + 1]
+if "fail" in url:
+    print("ERROR: [youtube] abc: Video unavailable", file=sys.stderr)
+    sys.exit(1)
+if "slow" in url:
+    time.sleep(30)
+path = out.replace("%(title)s", "Mein Lied / Teil 1").replace("%(ext)s", "mp3")
+os.makedirs(os.path.dirname(path), exist_ok=True)
+with open(path.replace("/ Teil", "- Teil"), "wb") as f:
+    f.write(b"ID3fake")
+'''
+
+
+def wait_job(srv, job_id, timeout=10):
+    end = time.time() + timeout
+    while time.time() < end:
+        st, r = req(srv, "GET", "/files/import/status?id=" + job_id)
+        assert st == 200
+        if r["state"] != "running":
+            return r
+        time.sleep(0.05)
+    raise AssertionError("job did not finish")
+
+
+@pytest.fixture
+def ytenv(env, tmp_path):
+    srv = env[0]
+    fake = tmp_path / "fake-yt-dlp"
+    fake.write_text(FAKE_YTDLP)
+    fake.chmod(0o755)
+    srv.imports.cfg["ytdlp"] = str(fake)
+    return env
+
+
+def test_safe_name():
+    assert pu.safe_name("a/b\\c\x00d") == "a b c d"
+    assert pu.safe_name("...") == "Import"
+    assert pu.safe_name("  .hidden  ") == "hidden"
+    assert len(pu.safe_name("ä" * 200).encode()) <= pu.MAX_NAME_BYTES
+
+
+def test_import_new_folder_from_title(ytenv):
+    srv, root, _ = ytenv
+    st, r = req(srv, "POST", "/files/import", {"url": "https://example.org/watch?v=1"}, CSRF)
+    assert st == 202 and r["state"] == "running"
+    r = wait_job(srv, r["id"])
+    assert r["state"] == "done", r
+    assert r["folder"] == "Mein Lied - Teil 1" and r["file"] == "Mein Lied - Teil 1.mp3"
+    assert (root / r["folder"] / r["file"]).read_bytes() == b"ID3fake"
+    assert not [p for p in root.iterdir() if p.name.startswith(".import-")]
+
+
+def test_import_into_existing_folder_no_overwrite(ytenv):
+    srv, root, _ = ytenv
+    (root / "Lieder").mkdir(parents=True)
+    (root / "Lieder" / "Mein Lied - Teil 1.mp3").write_bytes(b"old")
+    st, r = req(srv, "POST", "/files/import", {"url": "https://example.org/x", "folder": "Lieder"}, CSRF)
+    r = wait_job(srv, r["id"])
+    assert r["state"] == "done" and r["file"] == "Mein Lied - Teil 1 (2).mp3"
+    assert (root / "Lieder" / "Mein Lied - Teil 1.mp3").read_bytes() == b"old"
+
+
+def test_import_failure_reports_message(ytenv):
+    srv, root, _ = ytenv
+    st, r = req(srv, "POST", "/files/import", {"url": "https://example.org/fail"}, CSRF)
+    r = wait_job(srv, r["id"])
+    assert r["state"] == "error" and "Video unavailable" in r["message"]
+    assert not [p for p in root.iterdir() if p.name.startswith(".import-")]
+
+
+@pytest.mark.parametrize("body", [
+    {"url": "file:///etc/passwd"}, {"url": "-o /tmp/x"}, {"url": "ftp://x/y"}, {"url": 5}, {},
+    {"url": "https://example.org/x", "folder": "../etc"},
+])
+def test_import_rejects_bad_input(ytenv, body):
+    srv = ytenv[0]
+    st, r = req(srv, "POST", "/files/import", body, CSRF)
+    assert st == 400
+
+
+def test_import_needs_csrf_and_single_job(ytenv):
+    srv = ytenv[0]
+    assert req(srv, "POST", "/files/import", {"url": "https://example.org/x"})[0] == 403
+    st, r = req(srv, "POST", "/files/import", {"url": "https://example.org/slow"}, CSRF)
+    assert st == 202
+    assert req(srv, "POST", "/files/import", {"url": "https://example.org/x"}, CSRF)[0] == 429
+
+
+def test_import_missing_downloader(env):
+    srv = env[0]
+    srv.imports.cfg["ytdlp"] = "/nonexistent/yt-dlp"
+    assert req(srv, "GET", "/files/info")[1]["import_available"] is False
+    assert req(srv, "POST", "/files/import", {"url": "https://example.org/x"}, CSRF)[0] == 501
+
+
+def test_import_unknown_job(env):
+    assert req(env[0], "GET", "/files/import/status?id=nope")[0] == 404

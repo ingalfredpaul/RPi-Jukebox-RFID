@@ -15,7 +15,9 @@ Restart=on-failure
 RestartSec=3
 # Pi Zero 2 W has 415 MB RAM; MemoryMax only works if cgroup memory
 # delegation is available for user units (harmless otherwise).
-MemoryMax=64M
+# 256M instead of 64M: "load from link" runs yt-dlp + ffmpeg as child processes,
+# they count against this limit (the service alone needs ~25 MB).
+MemoryMax=256M
 NoNewPrivileges=true
 UMask=0002
 

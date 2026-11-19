@@ -25,6 +25,7 @@ import shutil
 import signal
 import socket
 import stat
+import subprocess
 import sys
 import threading
 import time
@@ -86,6 +87,8 @@ def load_config(environ=None, conf_path: str | None = None) -> dict:
         "mpd_host": get("MPD_HOST", "localhost"),
         "mpd_port": int(get("MPD_PORT", "6600")),
         "max_uploads": int(get("MAX_UPLOADS", "4")),
+        "ytdlp": get("YTDLP", "yt-dlp"),
+        "import_timeout": int(get("IMPORT_TIMEOUT", "3600")),
     }
 
 
@@ -425,6 +428,127 @@ class MpdUpdater:
 
 
 # --------------------------------------------------------------------------
+# Import from a link (yt-dlp + ffmpeg -> mp3), one job at a time
+# --------------------------------------------------------------------------
+
+URL_RE = re.compile(r"^https?://[^\s/?#]+[^\s]*$", re.I)
+MAX_URL_LEN = 2048
+MAX_NAME_BYTES = 120
+MAX_JOBS_KEPT = 20
+
+
+def safe_name(raw: str, fallback: str = "Import") -> str:
+    """Turn an arbitrary title into one harmless path component."""
+    s = re.sub(r"[\x00-\x1f\x7f/\\]", " ", raw or "")
+    s = re.sub(r"\s+", " ", s).strip().lstrip(".").strip()
+    b = s.encode("utf-8")[:MAX_NAME_BYTES]
+    s = b.decode("utf-8", "ignore").strip()
+    return s or fallback
+
+
+def unique_path(folder: str, name: str) -> tuple[str, str]:
+    stem, dot, ext = name.rpartition(".")
+    if not dot:
+        stem, ext = name, ""
+    candidate, n = name, 2
+    while os.path.lexists(os.path.join(folder, candidate)):
+        candidate = "%s (%d)%s" % (stem, n, "." + ext if ext else "")
+        n += 1
+    return os.path.join(folder, candidate), candidate
+
+
+class ImportJobs:
+    """Runs yt-dlp in a background thread. Only one job at a time (Pi Zero)."""
+
+    def __init__(self, cfg: dict, updater):
+        self.cfg, self.updater = cfg, updater
+        self._lock = threading.Lock()
+        self._jobs: dict[str, dict] = {}
+        self._busy = False
+
+    def available(self) -> bool:
+        return shutil.which(self.cfg["ytdlp"]) is not None
+
+    def start(self, url, folder) -> dict:
+        if not isinstance(url, str) or len(url) > MAX_URL_LEN or not URL_RE.match(url.strip()):
+            raise ApiError(400, "bad_url", "Bitte einen gültigen http(s)-Link eingeben.")
+        parts = clean_relpath(folder) if folder else None
+        if not self.available():
+            raise ApiError(501, "no_downloader",
+                           "yt-dlp ist auf der Box nicht installiert (siehe deploy/upload-service/README.md).")
+        with self._lock:
+            if self._busy:
+                raise ApiError(429, "busy", "Es läuft schon ein Download. Bitte warten, bis er fertig ist.")
+            self._busy = True
+            job = {"id": secrets.token_hex(8), "state": "running", "url": url.strip(),
+                   "folder": "/".join(parts) if parts else None, "file": None,
+                   "message": "", "started": int(time.time())}
+            self._jobs[job["id"]] = job
+            while len(self._jobs) > MAX_JOBS_KEPT:
+                self._jobs.pop(next(iter(self._jobs)))
+        threading.Thread(target=self._run, args=(job, parts), name="import", daemon=True).start()
+        return dict(job)
+
+    def get(self, job_id: str) -> dict:
+        with self._lock:
+            job = self._jobs.get(job_id)
+            if job is None:
+                raise ApiError(404, "not_found", "Download nicht gefunden.")
+            return dict(job)
+
+    def _finish(self, job: dict, **fields) -> None:
+        with self._lock:
+            job.update(fields)
+            self._busy = False
+
+    def _run(self, job: dict, parts) -> None:
+        root = self.cfg["root"]
+        tmp = os.path.join(root, ".import-" + secrets.token_hex(6))
+        try:
+            os.mkdir(tmp, 0o700)
+            cmd = [self.cfg["ytdlp"], "--no-playlist", "--no-progress", "--no-mtime",
+                   "--extract-audio", "--audio-format", "mp3", "--audio-quality", "5",
+                   "--max-filesize", str(self.cfg["max_bytes"]),
+                   "-o", os.path.join(tmp, "%(title)s.%(ext)s"), "--", job["url"]]
+            proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
+                                    stdin=subprocess.DEVNULL, start_new_session=True)
+            try:
+                _, err = proc.communicate(timeout=self.cfg["import_timeout"])
+            except subprocess.TimeoutExpired:
+                os.killpg(proc.pid, signal.SIGKILL)
+                proc.communicate()
+                raise ApiError(504, "timeout", "Download hat zu lange gedauert und wurde abgebrochen.") from None
+            mp3s = sorted(f for f in os.listdir(tmp) if f.lower().endswith(".mp3"))
+            if proc.returncode != 0 or not mp3s:
+                lines = [l for l in err.decode("utf-8", "replace").splitlines() if l.strip()]
+                errs = [l for l in lines if "ERROR" in l] or lines or ["unbekannter Fehler"]
+                log.warning("import failed (%s): %s", job["url"], " | ".join(lines[-5:]))
+                raise ApiError(502, "download_failed", "Download fehlgeschlagen: " + errs[-1][:300])
+            src = mp3s[0]
+            title = safe_name(src[:-4])
+            if parts is None:
+                parts = clean_relpath(title)
+            folder = ensure_dir(root, parts)
+            dest, name = unique_path(folder, title + ".mp3")
+            os.chmod(os.path.join(tmp, src), FILE_MODE)
+            os.replace(os.path.join(tmp, src), dest)
+            self.updater.schedule(parts + [name])
+            log.info("imported %s -> %s", job["url"], "/".join(parts + [name]))
+            self._finish(job, state="done", folder="/".join(parts), file=name, message="")
+        except ApiError as e:
+            self._finish(job, state="error", message=e.message)
+        except OSError as e:
+            msg = "Speicherkarte ist voll." if e.errno == errno.ENOSPC else "Fehler beim Speichern."
+            log.exception("import failed")
+            self._finish(job, state="error", message=msg)
+        except Exception:
+            log.exception("import failed")
+            self._finish(job, state="error", message="Interner Fehler.")
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
+
+
+# --------------------------------------------------------------------------
 # HTTP layer
 # --------------------------------------------------------------------------
 
@@ -496,13 +620,15 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         self.dispatch({"/files/list": self.h_list, "/files/info": self.h_info,
-                       "/files/health": self.h_health})
+                       "/files/health": self.h_health,
+                       "/files/import/status": self.h_import_status})
 
     do_HEAD = do_GET
 
     def do_POST(self):
         self.dispatch({"/upload": self.h_upload, "/files/mkdir": self.h_mkdir,
-                       "/files/delete": self.h_delete, "/files/rename": self.h_rename})
+                       "/files/delete": self.h_delete, "/files/rename": self.h_rename,
+                       "/files/import": self.h_import})
 
     # -- GET handlers
     def h_health(self, route):
@@ -511,7 +637,17 @@ class Handler(BaseHTTPRequestHandler):
     def h_info(self, route):
         free = shutil.disk_usage(self.cfg["root"]).free
         self.send_json(200, {"ok": True, "max_bytes": self.cfg["max_bytes"],
-                             "allowed_extensions": list(ALLOWED_EXTENSIONS), "free_bytes": free})
+                             "allowed_extensions": list(ALLOWED_EXTENSIONS), "free_bytes": free,
+                             "import_available": self.server.imports.available()})
+
+    def h_import_status(self, route):
+        job_id = parse_qs(route.query).get("id", [""])[0]
+        self.send_json(200, {"ok": True, **self.server.imports.get(job_id)})
+
+    def h_import(self, route):
+        data = self.read_json()
+        job = self.server.imports.start(data.get("url"), data.get("folder") or None)
+        self.send_json(202, {"ok": True, **job})
 
     def h_list(self, route):
         raw = parse_qs(route.query).get("path", [""])[0]
@@ -680,6 +816,7 @@ class Server(ThreadingHTTPServer):
         os.makedirs(cfg["root"], exist_ok=True)
         self.upload_slots = threading.BoundedSemaphore(cfg.get("max_uploads", 4))
         self.updater = updater or MpdUpdater(cfg["mpd_host"], cfg["mpd_port"])
+        self.imports = ImportJobs({"ytdlp": "yt-dlp", "import_timeout": 3600, **cfg}, self.updater)
         super().__init__((cfg["host"], cfg["port"]), Handler)
 
 

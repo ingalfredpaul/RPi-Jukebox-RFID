@@ -262,6 +262,15 @@
     "scan": {
       "unknown": "Diese Karte kennt die Box noch nicht",
       "assign": "Zuordnen"
+    },
+    "import": {
+      "label": "Oder von Link laden",
+      "hint": "Link einfügen (z. B. YouTube). Die Box lädt den Ton herunter, speichert ihn als MP3 in einem neuen Ordner und wählt ihn hier aus.",
+      "start": "Herunterladen",
+      "running": "Lädt …",
+      "wait": "Die Box lädt und wandelt um. Das kann bei langen Videos mehrere Minuten dauern. Bitte die Seite offen lassen.",
+      "done": "Fertig: „{{name}}“ ist gespeichert und ausgewählt.",
+      "failed": "Download fehlgeschlagen"
     }
   },
   "settings": {

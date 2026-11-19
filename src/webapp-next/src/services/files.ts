@@ -14,6 +14,18 @@ export interface FileInfo {
   max_bytes: number;
   allowed_extensions: string[];
   free_bytes: number;
+  /** yt-dlp is installed on the box (import from link possible). */
+  import_available?: boolean;
+}
+
+/** Background download of a link (yt-dlp -> mp3) on the box. */
+export interface ImportJob {
+  id: string;
+  state: 'running' | 'done' | 'error';
+  /** Folder (relative to the audio root) the mp3 was stored in, once done. */
+  folder: string | null;
+  file: string | null;
+  message: string;
 }
 
 export class FileApiError extends Error {
@@ -96,4 +108,8 @@ export const filesApi = {
   mkdir: (path: string) => postJson<{ ok: true }>('/files/mkdir', { path }),
   remove: (path: string) => postJson<{ ok: true }>('/files/delete', { path }),
   rename: (path: string, to: string) => postJson<{ ok: true }>('/files/rename', { path, to }),
+  /** Start a download; without `folder` the box creates a folder named after the title. */
+  importStart: (url: string, folder?: string) =>
+    postJson<ImportJob>('/files/import', folder ? { url, folder } : { url }),
+  importStatus: (id: string) => call<ImportJob>(`/files/import/status?id=${encodeURIComponent(id)}`),
 };
