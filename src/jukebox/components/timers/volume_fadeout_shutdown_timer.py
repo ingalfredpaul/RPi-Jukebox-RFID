@@ -71,8 +71,16 @@ class VolumeFadoutAndShutdown:
         self.current_volume = None
         self.fadeout_started = False
 
+    def _music_playing(self) -> bool:
+        """True while the player is playing (the timer does not apply then)."""
+        status = plugin.call_ignore_errors('player', 'ctrl', 'playerstatus')
+        return isinstance(status, dict) and status.get('state') == 'play'
+
     def _start_fadeout(self):
         """Callback for fadeout_start_timer - initiates the volume fadeout"""
+        if self._music_playing():
+            logger.info("Music is playing, no volume fadeout")
+            return
         logger.info("Starting volume fadeout sequence")
         self.fadeout_started = True
 
@@ -92,7 +100,18 @@ class VolumeFadoutAndShutdown:
         self.fadeout_timer.start()
 
     def _shutdown(self):
-        """Callback for shutdown_timer - performs the actual shutdown"""
+        """Callback for shutdown_timer - performs the actual shutdown, unless music is playing.
+
+        While music plays the timer does not apply: it starts again with the full duration
+        and only switches the box off after that many minutes without music.
+        """
+        if self._music_playing():
+            duration = self.total_duration
+            logger.info(f"Music is playing, timer restarts with {duration}s")
+            if self.fadeout_started and self.current_volume:
+                plugin.call_ignore_errors('volume', 'ctrl', 'set_volume', args=[self.current_volume])
+            self.start(duration)
+            return
         logger.info("Timer complete, initiating shutdown")
         plugin.call_ignore_errors('host', 'shutdown')
 
