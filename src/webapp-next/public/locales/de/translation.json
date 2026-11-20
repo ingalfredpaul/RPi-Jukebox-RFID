@@ -268,7 +268,13 @@
       "hint": "Link einfügen (z. B. YouTube). Die Box lädt den Ton herunter, speichert ihn als MP3 in einem neuen Ordner und wählt ihn hier aus.",
       "start": "Herunterladen",
       "running": "Lädt …",
-      "wait": "Die Box lädt und wandelt um. Das kann bei langen Videos mehrere Minuten dauern. Bitte die Seite offen lassen.",
+      "preparing": "Download wird vorbereitet …",
+      "progress": "Lädt herunter: {{percent}} %",
+      "convert": "Wandelt in MP3 um …",
+      "wait": "Das kann bei langen Videos mehrere Minuten dauern. Bitte die Seite offen lassen.",
+      "cancel": "Abbrechen",
+      "cancelling": "Wird abgebrochen …",
+      "cancelled": "Download abgebrochen. Es wurde nichts gespeichert.",
       "done": "Fertig: „{{name}}“ ist gespeichert und ausgewählt.",
       "failed": "Download fehlgeschlagen"
     }

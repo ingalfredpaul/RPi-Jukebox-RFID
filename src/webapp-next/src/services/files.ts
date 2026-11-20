@@ -21,7 +21,11 @@ export interface FileInfo {
 /** Background download of a link (yt-dlp -> mp3) on the box. */
 export interface ImportJob {
   id: string;
-  state: 'running' | 'done' | 'error';
+  state: 'running' | 'done' | 'error' | 'cancelled';
+  /** 'download' while yt-dlp fetches the audio, 'convert' while it writes the mp3. */
+  stage?: 'download' | 'convert' | 'done';
+  /** 0-100 while downloading, null otherwise. */
+  progress?: number | null;
   /** Folder (relative to the audio root) the mp3 was stored in, once done. */
   folder: string | null;
   file: string | null;
@@ -112,4 +116,5 @@ export const filesApi = {
   importStart: (url: string, folder?: string) =>
     postJson<ImportJob>('/files/import', folder ? { url, folder } : { url }),
   importStatus: (id: string) => call<ImportJob>(`/files/import/status?id=${encodeURIComponent(id)}`),
+  importCancel: (id: string) => postJson<ImportJob>('/files/import/cancel', { id }),
 };

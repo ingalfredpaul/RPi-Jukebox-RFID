@@ -506,3 +506,39 @@ def test_import_missing_downloader(env):
 
 def test_import_unknown_job(env):
     assert req(env[0], "GET", "/files/import/status?id=nope")[0] == 404
+
+
+def test_import_reports_progress_and_done(ytenv):
+    srv, root, _ = ytenv
+    st, r = req(srv, "POST", "/files/import", {"url": "https://example.org/watch?v=2"}, CSRF)
+    r = wait_job(srv, r["id"])
+    assert r["state"] == "done" and r["progress"] == 100 and r["stage"] == "done"
+
+
+def test_import_cancel_stops_download_and_cleans_up(ytenv):
+    srv, root, _ = ytenv
+    st, r = req(srv, "POST", "/files/import", {"url": "https://example.org/slow"}, CSRF)
+    assert st == 202
+    st, c = req(srv, "POST", "/files/import/cancel", {"id": r["id"]}, CSRF)
+    assert st == 200
+    r = wait_job(srv, r["id"], timeout=10)
+    assert r["state"] == "cancelled" and r["message"] == pu.CANCELLED_MSG
+    assert not [p for p in root.iterdir() if p.name.startswith(".import-")]
+    # the box is free again for the next job
+    st, r2 = req(srv, "POST", "/files/import", {"url": "https://example.org/watch?v=3"}, CSRF)
+    assert st == 202
+    assert wait_job(srv, r2["id"])["state"] == "done"
+
+
+def test_cancel_finished_job_changes_nothing(ytenv):
+    srv, root, _ = ytenv
+    st, r = req(srv, "POST", "/files/import", {"url": "https://example.org/watch?v=4"}, CSRF)
+    r = wait_job(srv, r["id"])
+    st, c = req(srv, "POST", "/files/import/cancel", {"id": r["id"]}, CSRF)
+    assert st == 200 and c["state"] == "done"
+
+
+def test_cancel_unknown_job_is_404(ytenv):
+    srv, _, _ = ytenv
+    st, r = req(srv, "POST", "/files/import/cancel", {"id": "nope"}, CSRF)
+    assert st == 404

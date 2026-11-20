@@ -15,6 +15,7 @@ box to the internet.
 from __future__ import annotations
 
 import argparse
+import collections
 import errno
 import json
 import logging
@@ -457,13 +458,31 @@ def unique_path(folder: str, name: str) -> tuple[str, str]:
     return os.path.join(folder, candidate), candidate
 
 
+PROGRESS_RE = re.compile(r"\[download\]\s+(\d+(?:\.\d+)?)%")
+CANCELLED_MSG = "Abgebrochen."
+
+
+def _kill_group(proc: subprocess.Popen) -> None:
+    """Kills yt-dlp and its children (ffmpeg); a process that already finished is fine."""
+    try:
+        os.killpg(proc.pid, signal.SIGKILL)
+    except ProcessLookupError:
+        pass
+
+
 class ImportJobs:
-    """Runs yt-dlp in a background thread. Only one job at a time (Pi Zero)."""
+    """Runs yt-dlp in a background thread. Only one job at a time (Pi Zero).
+
+    Job fields: state (running|done|error|cancelled), stage (download|convert),
+    progress (0-100 while downloading, else None), message, folder, file.
+    """
 
     def __init__(self, cfg: dict, updater):
         self.cfg, self.updater = cfg, updater
         self._lock = threading.Lock()
         self._jobs: dict[str, dict] = {}
+        self._procs: dict[str, subprocess.Popen] = {}
+        self._cancelled: set[str] = set()
         self._busy = False
 
     def available(self) -> bool:
@@ -480,7 +499,8 @@ class ImportJobs:
             if self._busy:
                 raise ApiError(429, "busy", "Es läuft schon ein Download. Bitte warten, bis er fertig ist.")
             self._busy = True
-            job = {"id": secrets.token_hex(8), "state": "running", "url": url.strip(),
+            job = {"id": secrets.token_hex(8), "state": "running", "stage": "download",
+                   "progress": 0, "url": url.strip(),
                    "folder": "/".join(parts) if parts else None, "file": None,
                    "message": "", "started": int(time.time())}
             self._jobs[job["id"]] = job
@@ -496,31 +516,81 @@ class ImportJobs:
                 raise ApiError(404, "not_found", "Download nicht gefunden.")
             return dict(job)
 
+    def cancel(self, job_id: str) -> dict:
+        """Stops a running download (yt-dlp and ffmpeg). Finished jobs are returned unchanged."""
+        with self._lock:
+            job = self._jobs.get(job_id)
+            if job is None:
+                raise ApiError(404, "not_found", "Download nicht gefunden.")
+            if job["state"] != "running":
+                return dict(job)
+            self._cancelled.add(job_id)  # _run kills the process if it is not started yet
+            proc = self._procs.get(job_id)
+        if proc is not None:
+            _kill_group(proc)
+        return self.get(job_id)
+
+    def _update(self, job: dict, **fields) -> None:
+        with self._lock:
+            job.update(fields)
+
     def _finish(self, job: dict, **fields) -> None:
         with self._lock:
             job.update(fields)
             self._busy = False
 
+    def _read_output(self, job: dict, proc: subprocess.Popen, tail) -> None:
+        """Reads yt-dlp's output line by line: progress for the UI, last lines for error messages."""
+        for raw in proc.stdout:
+            line = raw.decode("utf-8", "replace").strip()
+            if not line:
+                continue
+            tail.append(line)
+            m = PROGRESS_RE.search(line)
+            if m:
+                self._update(job, stage="download", progress=min(100, int(float(m.group(1)))))
+            elif line.startswith("[ExtractAudio]"):
+                self._update(job, stage="convert", progress=None)
+
     def _run(self, job: dict, parts) -> None:
         root = self.cfg["root"]
         tmp = os.path.join(root, ".import-" + secrets.token_hex(6))
+        proc = None
         try:
             os.mkdir(tmp, 0o700)
-            cmd = [self.cfg["ytdlp"], "--no-playlist", "--no-progress", "--no-mtime",
+            cmd = [self.cfg["ytdlp"], "--no-playlist", "--newline", "--no-mtime",
+                   "-f", "ba/b",  # nur die Tonspur laden, kein Video
+                   # YouTube-Client "android": Standard und "tv" liefern teils "The page needs to be reloaded".
+                   "--extractor-args", "youtube:player_client=android",
                    "--extract-audio", "--audio-format", "mp3", "--audio-quality", "5",
                    "--max-filesize", str(self.cfg["max_bytes"]),
                    "-o", os.path.join(tmp, "%(title)s.%(ext)s"), "--", job["url"]]
-            proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
+            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                                     stdin=subprocess.DEVNULL, start_new_session=True)
+            with self._lock:
+                self._procs[job["id"]] = proc
+                cancel_early = job["id"] in self._cancelled
+            if cancel_early:
+                _kill_group(proc)
+            tail: collections.deque = collections.deque(maxlen=30)
+            reader = threading.Thread(target=self._read_output, args=(job, proc, tail), daemon=True)
+            reader.start()
             try:
-                _, err = proc.communicate(timeout=self.cfg["import_timeout"])
+                proc.wait(timeout=self.cfg["import_timeout"])
             except subprocess.TimeoutExpired:
                 os.killpg(proc.pid, signal.SIGKILL)
-                proc.communicate()
+                proc.wait()
                 raise ApiError(504, "timeout", "Download hat zu lange gedauert und wurde abgebrochen.") from None
+            finally:
+                reader.join(5)
+            with self._lock:
+                cancelled = job["id"] in self._cancelled
+            if cancelled:
+                self._finish(job, state="cancelled", message=CANCELLED_MSG)
+                return
             mp3s = sorted(f for f in os.listdir(tmp) if f.lower().endswith(".mp3"))
             if proc.returncode != 0 or not mp3s:
-                lines = [l for l in err.decode("utf-8", "replace").splitlines() if l.strip()]
+                lines = list(tail)
                 errs = [l for l in lines if "ERROR" in l] or lines or ["unbekannter Fehler"]
                 log.warning("import failed (%s): %s", job["url"], " | ".join(lines[-5:]))
                 raise ApiError(502, "download_failed", "Download fehlgeschlagen: " + errs[-1][:300])
@@ -534,7 +604,8 @@ class ImportJobs:
             os.replace(os.path.join(tmp, src), dest)
             self.updater.schedule(parts + [name])
             log.info("imported %s -> %s", job["url"], "/".join(parts + [name]))
-            self._finish(job, state="done", folder="/".join(parts), file=name, message="")
+            self._finish(job, state="done", progress=100, stage="done",
+                         folder="/".join(parts), file=name, message="")
         except ApiError as e:
             self._finish(job, state="error", message=e.message)
         except OSError as e:
@@ -545,6 +616,10 @@ class ImportJobs:
             log.exception("import failed")
             self._finish(job, state="error", message="Interner Fehler.")
         finally:
+            if proc is not None:
+                with self._lock:
+                    self._procs.pop(job["id"], None)
+                    self._cancelled.discard(job["id"])
             shutil.rmtree(tmp, ignore_errors=True)
 
 
@@ -628,7 +703,8 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         self.dispatch({"/upload": self.h_upload, "/files/mkdir": self.h_mkdir,
                        "/files/delete": self.h_delete, "/files/rename": self.h_rename,
-                       "/files/import": self.h_import})
+                       "/files/import": self.h_import,
+                       "/files/import/cancel": self.h_import_cancel})
 
     # -- GET handlers
     def h_health(self, route):
@@ -643,6 +719,11 @@ class Handler(BaseHTTPRequestHandler):
     def h_import_status(self, route):
         job_id = parse_qs(route.query).get("id", [""])[0]
         self.send_json(200, {"ok": True, **self.server.imports.get(job_id)})
+
+    def h_import_cancel(self, route):
+        data = self.read_json()
+        job = self.server.imports.cancel(str(data.get("id", "")))
+        self.send_json(200, {"ok": True, **job})
 
     def h_import(self, route):
         data = self.read_json()
